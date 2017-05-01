@@ -2,9 +2,146 @@
 <html lang="sv">
 <head>
 	<title>DM2518 Project - QueueR</title>
+	<link rel="stylesheet" href="node_modules/onsenui/css/onsenui.css">
+	<link rel="stylesheet" href="node_modules/onsenui/css/onsen-css-components.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="shortcut icon" type="image/png" href="images/fav.png"/>
 </head>
 <body>
+
+<ons-navigator title="Navigator" var="myNavigator" id="myNavigator">
+  <ons-page>
+
+    <ons-toolbar>
+		<div class="left animate">
+			<ons-toolbar-button>
+				<ons-icon icon="ion-home" style="font-size: 32px; width: 1em">
+			</ons-toolbar-button>
+		</div>
+		<div class="center">QueueR</div>
+		<div class="right animate">
+			<ons-toolbar-button>
+				<ons-icon icon="ion-navicon" style="font-size: 32px; width: 1em">
+			</ons-toolbar-button>
+		</div>
+    </ons-toolbar>
+
+    <div class="custom__header">Nearby Queues</div>
+
+	<ons-row class="custom__row-header">
+		<ons-col width="40%">Store</ons-col>
+		<ons-col>Place</ons-col>
+		<ons-col>Address</ons-col>
+		<ons-col></ons-col>
+	</ons-row>
+
+	<ons-row class="row-item" onclick="myNavigator.pushPage('ikea.html', { animation : 'slide' } )">
+		<ons-col width="40%">IKEA</ons-col>
+		<ons-col>4</ons-col>
+		<ons-col class="text-blue center"><ons-icon icon="ion-ios-location"></ons-icon></ons-col>
+		<ons-col class="text-green text-right"><ons-icon icon="ion-plus-circled"></ons-icon></ons-col>
+	</ons-row>
+
+	<ons-row class="row-item" onclick="myNavigator.pushPage('ikea.html', { lindex : 'slide' } )">
+		<ons-col width="40%">Lindex</ons-col>
+		<ons-col>32</ons-col>
+		<ons-col class="text-blue center"><ons-icon icon="ion-ios-location"></ons-icon></ons-col>
+		<ons-col class="text-green text-right"><ons-icon icon="ion-plus-circled"></ons-icon></ons-col>
+	</ons-row>
+
+	<ons-row class="row-item" onclick="myNavigator.pushPage('hm.html', { lindex : 'slide' } )">
+		<ons-col width="40%">H&M</ons-col>
+		<ons-col>32</ons-col>
+		<ons-col class="text-blue center"><ons-icon icon="ion-ios-location"></ons-icon></ons-col>
+		<ons-col class="text-green text-right"><ons-icon icon="ion-plus-circled"></ons-icon></ons-col>
+	</ons-row>
+
+	<ons-row class="row-item" onclick="myNavigator.pushPage('hm.html', { lindex : 'slide' } )">
+		<ons-col width="40%">Kungliga Tekniska Högskolan</ons-col>
+		<ons-col>32</ons-col>
+		<ons-col class="text-blue center"><ons-icon icon="ion-ios-location"></ons-icon></ons-col>
+		<ons-col class="text-green text-right"><ons-icon icon="ion-plus-circled"></ons-icon></ons-col>
+	</ons-row>
+
+  	<div class="btn center animate bg-blue">
+  		Se joined queues
+  	</div>
+
+    </ons-list>
+  </ons-page>
+</ons-navigator>
+
+<ons-template id="ikea.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left" style="line-height: 44px">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+      <div class="center">Title</div>
+      <div class="right" style="line-height: 44px">
+        Right
+      </div>
+    </ons-toolbar>
+
+    <div style="text-align: center">
+      <br />
+      <ons-button modifier="light" onclick="myNavigator.popPage()">
+        Pop Page
+      </ons-button>
+    </div>
+  </ons-page>
+</ons-template>
+
+<ons-template id="lindex.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+      <div class="center">Search</div>
+      <div class="right" style="padding-right: 6px">
+        <input type="search" class="search-input" placeholder="Search" style="margin-top: 6px;">
+      </div>
+    </ons-toolbar>
+
+    <div style="text-align: center">
+      <br />
+      <ons-button modifier="light" onclick="myNavigator.popPage()">
+        Pop Page
+      </ons-button>
+    </div>
+  </ons-page>
+</ons-template>
+
+<ons-template id="hm.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+      <div class="center"></div>
+      <div class="right">
+        <ons-search-input></ons-search-input>
+      </div>
+    </ons-toolbar>
+
+    <div style="text-align: center">
+      <br />
+      <ons-button modifier="light" onclick="myNavigator.popPage()">
+        Pop Page
+      </ons-button>
+    </div>
+  </ons-page>
+</ons-template>
+	<div> HOLA </div>
+
+
+	<script src="node_modules/react/react.js"></script>
+	<script src="node_modules/react-dom/dist/react-dom.js"></script>
+	<script src="node_modules/onsenui/js/onsenui.js"></script>
+	<script src="node_modules/react-onsenui/dist/react-onsenui.js"></script>
 
 </body>
 </html>
