@@ -51,3 +51,12 @@
 	border-bottom: 1px solid #EEE;
 }
 .row-item:nth-child(even) {background:#FFF;}
+
+.header-icon {
+  font-size: 32px;
+  width: 1em;
+}
+
+.page-content {
+  padding-top: 56px;
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- This file is the template for "www/index.html". Modify it to fit your needs -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'"> The following EJS lines include the necessary CSS and JS
+  from Monaca (cordova.js/ loader.js) in production mode -->
+<% for (var dep in htmlWebpackPlugin.options.externalJS) { %>
+  <script type="text/javascript" src="<%= htmlWebpackPlugin.options.externalJS[dep] %>"></script><% } %>
+<% for (var dep in htmlWebpackPlugin.options.externalCSS) { %>
+  <link rel="stylesheet" type="text/css" href="<%= htmlWebpackPlugin.options.externalCSS[dep] %>"><% } %>
+</head>
+<body>
+  <style>
+/* Generic CSS
+*/
+.center {text-align: center;}
+.text-right {text-align: right;}
+.animate:hover {
+	cursor: pointer;
+	opacity: 0.8;
+	transition: 0.3s;
+}
+/* Colors and backgrounds
+*/
+.text-blue {color: #07c;}
+.bg-blue {background: #07c;}
+
+.text-red {color: #F00;}
+.text-green {color: #1ac41a;}
+
+/* Customized Buttons
+*/
+.btn {
+    color: #FFF;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 2px;
+    font-size: 18px;
+}
+
+/* Customized Toolbar
+*/
+.toolbar {
+	background: #333;
+	color: #FFF;
+}
+.toolbar-button,
+.toolbar__title,
+.toolbar a {color:#FFF !important;}
+
+/* Customized Lists
+*/
+.custom__header {padding:10px; font-size:18px;border-bottom: 1px solid #CCC;background:#EEE;}
+.custom__row-header {
+	padding:10px; 
+	font-size:15px;
+	border-bottom: 1px solid #EEE;
+	background:#FFF;
+	font-weight: bold;
+}
+.row-item {
+	padding:10px; 
+	margin-bottom: 1px; 
+	border-bottom: 1px solid #EEE;
+}
+.row-item:nth-child(even) {background:#FFF;}
+
+.page-content {
+  padding-top: 56px;
+}
+.detail-map {
+  background-color: blue;
+  height: 500px;
+    width: 100%;
+}
+.back-button {
+  color: white;
+}
+  </style>
+  <div id="app"></div>
+</body>
+</html>
