@@ -13,16 +13,23 @@ export default class DetailPage extends Component {
     const zoom = 11
     return (
       <Page renderToolbar={() => <CustomToolbar/>}>
-        <GoogleMapReact
-          defaultCenter={center}
-          defaultZoom={zoom}
-        >
-          <Marker
-            lat={59.3447231}
-            lng={18.0632769}
-            text={'Systembolaget Birger Jarlsgatan'}
-          />
-        </GoogleMapReact>
+        <div className='map-wrapper'>
+          <GoogleMapReact
+            defaultCenter={center}
+            defaultZoom={zoom}
+          >
+            <Marker
+              lat={59.3447231}
+              lng={18.0632769}
+              text={'Systembolaget Birger Jarlsgatan'}
+            />
+          </GoogleMapReact>
+        </div>
+        <div className="detail-content">
+          Hello This is a test
+          <br/>
+          Probably need some more info here?
+        </div>
       </Page>
     );
   }

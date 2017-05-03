@@ -1,1 +1,7 @@
+.map-wrapper {
+  height: 50vh !important;
+}
 
+.detail-content {
+  padding: 10px;
+}
