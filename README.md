@@ -1,7 +1,7 @@
 # DH2518
 Project of a course at KTH: DH2518
 
-# Instructions:
+# Development
 - Clone project
 - Make sure your terminal is in the qr folder: `cd qr`
 - Run `npm install` to install the dependencies
@@ -15,4 +15,4 @@ Project of a course at KTH: DH2518
 
 # Other useful things
 - All the code is in the qr/src folder. These should be the only files you need to edit.
-- The css is currently inlined in qr/src/public/index.html.ejs. Will try to find a better solution to this in the future.
+- The visual components are each in their own folder. These folders contain an index.js and index.css file. Try to keep the css specific to the component you are working on. The src/style.css file should be used for more global css.
