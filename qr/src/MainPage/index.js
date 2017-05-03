@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import {Toolbar, Page, Button, Row, Col} from 'react-onsenui'
 import './index.css'
 
-import SecondPage from './../SecondPage'
 import CustomToolbar from './../CustomToolbar'
 import DetailPage from './../DetailPage'
 
@@ -29,8 +28,7 @@ export default class MainPage extends React.Component {
 
   render() {
     return (
-      <Page>
-        <CustomToolbar></CustomToolbar>
+      <Page renderToolbar={() => <CustomToolbar/>}>
         <div className="page-content">
           <div className="custom__header">Nearby Queues</div>
           <Row className='custom__row-header'>

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import GoogleMapReact from 'google-map-react'
 import {Page} from 'react-onsenui'
-import 'index.css'
+import './index.css'
 
-import CustomToolbar from './CustomToolbar'
-import Marker from './Marker'
+import CustomToolbar from './../CustomToolbar'
+import Marker from './../Marker'
 
 export default class DetailPage extends Component {
 
@@ -12,8 +12,7 @@ export default class DetailPage extends Component {
     const center = { lat: 59.3446561, lng: 18.0555958 }
     const zoom = 11
     return (
-      <Page>
-        <CustomToolbar></CustomToolbar>
+      <Page renderToolbar={() => <CustomToolbar/>}>
         <GoogleMapReact
           defaultCenter={center}
           defaultZoom={zoom}
