@@ -31,19 +31,34 @@ export default class MainPage extends React.Component {
       <Page renderToolbar={() => <CustomToolbar/>}>
         <div className="page-content">
           <div className="custom__header">Nearby Queues</div>
-          <Row className='custom__row-header'>
-            <Col width="40%">Store</Col>
-            <Col>Place</Col>
-            <Col class='center'>Address</Col>
-            <Col></Col>
-          </Row>
 
-          <Row class="row-item" onClick={this.pushPage}>
-            <Col width="40%">IKEA</Col>
-            <Col>4</Col>
-            <Col className="text-blue center"><ons-icon icon="ion-ios-location"></ons-icon></Col>
-            <Col class="text-green text-right"><ons-icon icon="ion-plus-circled"></ons-icon></Col>
-          </Row>
+          <div className="list__blue" onClick={this.pushPage}>
+
+            <div className="left">
+              <p className="nomargin"><b>Försäkringskassan</b></p>
+              <small>Roslagsgatan 29</small>
+            </div>
+
+            <div className="right">
+
+              <div className="center inlineBlock">
+                <ons-icon icon="ion-checkmark-circled" className="main__icon_size"></ons-icon><br />
+                <small>JOIN</small>
+              </div>
+
+              <div className="center inlineBlock">
+                <div className="main__circle">
+                  <div className="main__circle_adjuster">
+                    30
+                  </div>
+                </div>
+                <small>Mins</small>
+              </div>
+            </div>
+
+            <div className="clearBoth"></div>
+
+          </div>
         </div>
       </Page>
     )

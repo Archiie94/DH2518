@@ -1,1 +1,14 @@
 /* Style for the custom toolbar */
+.toolbar {
+	background: #FFF !important;
+	color: #07c !important;
+	border-bottom: 1px solid #CCC;
+}
+.toolbar .back-button,
+.toolbar__title,
+.toolbar a {
+	color: #07c !important;
+}
+.toolbar__title {
+	font-size: 1.6rem !important;
+}

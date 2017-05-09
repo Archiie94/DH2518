@@ -1,12 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+* {
+  font-family: 'Roboto', sans-serif !important;
+}
+
 /* Generic CSS
  */
 .center {text-align: center;}
 .text-right {text-align: right;}
+.left {float: left;}
+.right {float: right;}
+.clearBoth {clear:both;}
 .animate:hover {
   cursor: pointer;
   opacity: 0.8;
   transition: 0.3s;
 }
+
+.inlineBlock {display: inline-block;}
 /* Colors and backgrounds
  */
 .text-blue {color: #07c;}
@@ -25,6 +36,15 @@
   font-size: 18px;
 }
 
+.list__blue {
+  background: #07c; 
+  border-radius: 4px; 
+  margin: 10px;
+  color: #FFF;
+  padding: 3%;
+}
+.nomargin {margin:0px;}
+
 /* Customized Toolbar
  */
 .toolbar {
@@ -33,7 +53,7 @@
 }
 .toolbar-button,
 .toolbar__title,
-.toolbar a {color:#FFF !important;}
+.toolbar a {color:#FFF;}
 
 /* Customized Lists
  */
@@ -60,3 +80,5 @@
 .back-button {
   color: white;
 }
+
+
