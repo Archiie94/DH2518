@@ -21,7 +21,7 @@ export default class MainPage extends React.Component {
     this.model.subscribe(this)
   }
 
-  componentDidUnmount() {
+  componentWillUnmount() {
     this.model.unsubscribe(this)
   }
 
@@ -38,9 +38,9 @@ export default class MainPage extends React.Component {
     }
   }
 
-  pushPage() {
+  pushPage(queue) {
     console.log("pushing the page")
-    this.props.navigator.pushPage({component: () => <DetailPage queue='HM'/>})
+    this.props.navigator.pushPage({component: () => <DetailPage queue={queue}/>})
   }
 
   renderToolbar() {
@@ -54,6 +54,7 @@ export default class MainPage extends React.Component {
   render() {
     const { queues } = this.model.getState()
     const renderQueue = (queue) => (
+<<<<<<< HEAD
       <div key={queue.id}
            className="list__blue">
 
@@ -90,6 +91,19 @@ export default class MainPage extends React.Component {
         <div className="clearBoth"></div>
 
       </div>
+=======
+      <Row class="row-item" onClick={() => this.pushPage(queue)} key={queue.id}>
+        <Col width="40%">{queue.id}, {"" + queue.inQueue} {queue.coordinates.lat}</Col>
+        <Col>4</Col>
+        <Col className="text-blue center">
+          <ons-icon icon="ion-ios-location"></ons-icon>
+        </Col>
+        <Col class="text-green text-right">
+          <ons-icon icon="ion-plus-circled"
+                    onClick={() => this.model.joinQueue(queue)}></ons-icon>
+         </Col>
+      </Row>
+>>>>>>> Unsubscribing fixed
     )
     return (
       <Page renderToolbar={() => <CustomToolbar/>}>

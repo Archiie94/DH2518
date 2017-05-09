@@ -41,7 +41,7 @@ class DataManager {
 
   unsubscribe(subscriber) {
     const index = R.indexOf(subscriber, this.subscribers)
-    this.subscribers = R.remove(index, this.subscribers)
+    this.subscribers = R.remove(index, 1, this.subscribers)
   }
 
   createQueue(id, coordinates, address) {
