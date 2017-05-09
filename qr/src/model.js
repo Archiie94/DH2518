@@ -9,17 +9,19 @@ class DataManager {
     this.subscribers = []
     this.state = {
       queues: [
-        this.createQueue('HM', {lat: 59.3336886, lng: 18.0725117}, "Smålandsgatan 16"),
-        this.createQueue('Systemet', {lat: 59.3332612, lng: 18.0663472}, "Norrlandsgatan 3"),
-        this.createQueue('Cool Q', {lat: -27.5693884, lng: 152.9251143},"u2/25 Valance St, Oxley QLD 4075"),
-        this.createQueue('Hello Q hair', {lat: 24.0655611, lng: 120.695485}, "號, No. 18振興東街 Wufeng Dist),
-        this.createQueue('Goodbe', {lat: 59.3497173, lng: 18.105518}, "Södra Hamnvägen 46")
-      ]
+        this.createQueue('HM', {lat: 59.3336886, lng: 18.0725117}, 'Smålandsgatan 16'),
+        this.createQueue('Systemet', {lat: 59.3332612, lng: 18.0663472}, 'Norrlandsgatan 3'),
+        this.createQueue('Cool Q', {lat: -27.5693884, lng: 152.9251143},'u2/25 Valance St, Oxley QLD 4075'),
+        this.createQueue('Hello Q hair', {lat: 24.0655611, lng: 120.695485}, '號, No. 18振興東街 Wufeng Dist'),
+        this.createQueue('Goodbe', {lat: 59.3497173, lng: 18.105518}, 'Södra Hamnvägen 46')
+      ],
+      mapMode: true
     }
 
     // Public API
     this.joinQueue = this.joinQueue.bind(this);
     this.leaveQueue = this.leaveQueue.bind(this);
+    this.toggleMapMode = this.toggleMapMode.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.unsubscribe = this.unsubscribe.bind(this);
   }
@@ -42,6 +44,12 @@ class DataManager {
   unsubscribe(subscriber) {
     const index = R.indexOf(subscriber, this.subscribers)
     this.subscribers = R.remove(index, 1, this.subscribers)
+  }
+
+  toggleMapMode() {
+    console.log('switching to map mode')
+    const { mapMode } = this.state
+    this.setState({mapMode: !mapMode })
   }
 
   createQueue(id, coordinates, address) {
