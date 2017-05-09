@@ -67,12 +67,6 @@ constructor(props) {
 
         <div className="right">
 
-<<<<<<< HEAD
-              <div className="center inlineBlock">
-                <ons-icon icon="ion-checkmark-circled" className="main__icon_size"></ons-icon><br />
-                <small>Join</small>
-              </div>
-=======
           <div className="center inlineBlock">
             <Icon icon={queue.inQueue ? 'ion-close-circled' : 'ion-checkmark-circled'}
                       className={ 'main__icon_size ' + (queue.inQueue ? 'text-red' : '')}>
@@ -85,7 +79,6 @@ constructor(props) {
               }
             </small>
           </div>
->>>>>>> af7a07c4c4eede1514fa7eb026625e159093c335
 
           <div className="center inlineBlock">
             <div className="main__circle">
@@ -105,6 +98,7 @@ constructor(props) {
       <Marker
         lat={queue.coordinates.lat}
         lng={queue.coordinates.lng}
+        key={queue.id}
         text={'Systembolaget Birger Jarlsgatan'}
       />
     )
