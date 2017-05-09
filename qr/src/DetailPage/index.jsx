@@ -2,25 +2,40 @@ import React, { Component } from 'react'
 import GoogleMapReact from 'google-map-react'
 import {Page} from 'react-onsenui'
 import './index.css'
-
+import model from '../model'
 import CustomToolbar from './../CustomToolbar'
 import Marker from './../Marker'
 
 export default class DetailPage extends Component {
 
-  constructor (props){
+  constructor(props) {
     super(props)
+    this.notify = this.notify.bind(this)
+    this.model = model
     this.toggleChatMode = this.toggleChatMode.bind(this);
     this.state = { 
       chatMode: false
     }
   }
-
   toggleChatMode (state){
     this.setState({
       chatMode: state
     })
   }
+  componentDidMount() {
+    this.model.subscribe(this)
+  }
+
+  componentWillUnmount() {
+    this.model.unsubscribe(this)
+  }
+
+  notify(newState) {
+    this.setState(newState)
+  }
+
+  // To check if 
+  // this.props.queue.inQueue;
 
   render() {
     const center = { lat: 59.3446561, lng: 18.0555958 }
@@ -105,7 +120,6 @@ export default class DetailPage extends Component {
               </div>
             </div>
           </div>
-
         </div>
       </Page>
     );

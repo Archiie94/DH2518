@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Toolbar, Page, Button, Row, Col} from 'react-onsenui'
+import {Toolbar, Page, Button, Row, Col, Icon} from 'react-onsenui'
 import './index.css'
+import model from '../model'
 
 import CustomToolbar from './../CustomToolbar'
 import DetailPage from './../DetailPage'
@@ -11,11 +12,34 @@ export default class MainPage extends React.Component {
   constructor(props) {
     super(props)
     this.pushPage = this.pushPage.bind(this)
+    this.notify = this.notify.bind(this)
+    this.toggleJoinQueue = this.toggleJoinQueue.bind(this)
+    this.model = model
   }
 
-  pushPage() {
-    console.log("pushing the page")
-    this.props.navigator.pushPage({component: () => <DetailPage queue='HM'/>})
+  componentDidMount() {
+    this.model.subscribe(this)
+  }
+
+  componentWillUnmount() {
+    this.model.unsubscribe(this)
+  }
+
+  notify(newState) {
+    this.setState(newState)
+  }
+
+  toggleJoinQueue(queue) {
+    console.log(queue)
+    if (queue.inQueue) {
+      this.model.leaveQueue(queue)
+    } else {
+      this.model.joinQueue(queue)
+    }
+  }
+
+  pushPage(queue) {
+    this.props.navigator.pushPage({component: () => <DetailPage queue={queue}/>})
   }
 
   renderToolbar() {
@@ -27,38 +51,64 @@ export default class MainPage extends React.Component {
   }
 
   render() {
-    return (
-      <Page renderToolbar={() => <CustomToolbar/>}>
-        <div className="page-content">
-          <div className="custom__header">Nearby Queues</div>
+    const { queues } = this.model.getState()
+    const renderQueue = (queue) => (
+      <div key={queue.id}
+           className="list__blue">
 
-          <div className="list__blue" onClick={this.pushPage}>
+        <div className="left"
+             onClick={() => this.pushPage(queue)}>
+          <p className="nomargin"><b>{queue.id}</b></p>
+          <small>{queue.address}</small>
+        </div>
 
-            <div className="left">
-              <p className="nomargin"><b>Försäkringskassan</b></p>
-              <small>Roslagsgatan 29</small>
-            </div>
+        <div className="right">
 
-            <div className="right">
-
+<<<<<<< HEAD
               <div className="center inlineBlock">
                 <ons-icon icon="ion-checkmark-circled" className="main__icon_size"></ons-icon><br />
                 <small>Join</small>
               </div>
+=======
+          <div className="center inlineBlock">
+            <Icon icon={queue.inQueue ? 'ion-close-circled' : 'ion-checkmark-circled'}
+                      className={ 'main__icon_size ' + (queue.inQueue ? 'text-red' : '')}>
+            </Icon>
+            <br />
+            <small onClick={() => this.toggleJoinQueue(queue)}>
+              { queue.inQueue
+                  ? "Leave"
+                  : "Join"
+              }
+            </small>
+          </div>
+>>>>>>> af7a07c4c4eede1514fa7eb026625e159093c335
 
-              <div className="center inlineBlock">
-                <div className="main__circle">
-                  <div className="main__circle_adjuster">
-                    30
-                  </div>
-                </div>
-                <small>Mins</small>
+          <div className="center inlineBlock">
+            <div className="main__circle">
+              <div className="main__circle_adjuster">
+                30
               </div>
             </div>
-
-            <div className="clearBoth"></div>
-
+            <small>Mins</small>
           </div>
+        </div>
+
+        <div className="clearBoth"></div>
+
+      </div>
+    )
+    return (
+      <Page renderToolbar={() => <CustomToolbar/>}>
+        <div className="page-content">
+          <div className="custom__header">Nearby Queues</div>
+          <Row className='custom__row-header'>
+            <Col width="40%">Store</Col>
+            <Col>Place</Col>
+            <Col class='center'>Address</Col>
+            <Col></Col>
+          </Row>
+          { queues.map(renderQueue) }
         </div>
       </Page>
     )
