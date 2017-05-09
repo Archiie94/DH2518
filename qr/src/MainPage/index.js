@@ -43,7 +43,7 @@ export default class MainPage extends React.Component {
 
               <div className="center inlineBlock">
                 <ons-icon icon="ion-checkmark-circled" className="main__icon_size"></ons-icon><br />
-                <small>JOIN</small>
+                <small>Join</small>
               </div>
 
               <div className="center inlineBlock">
