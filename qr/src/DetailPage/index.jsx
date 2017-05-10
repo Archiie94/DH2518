@@ -1,3 +1,4 @@
+import R from 'ramda'
 import React, { Component } from 'react'
 import GoogleMapReact from 'google-map-react'
 import {Page, Dialog} from 'react-onsenui'
