@@ -33,6 +33,8 @@ export default class DetailPage extends Component {
     } else {
       this.model.joinQueue(queue)
     }
+    //FIXME not the right way to do it
+    queue.inQueue = ! queue.inQueue
   }
 
   componentDidMount() {
@@ -57,13 +59,17 @@ export default class DetailPage extends Component {
   render() {
     const center = { lat: 59.3446561, lng: 18.0555958 }
     const zoom = 11
-
+    const toggle = () => this.toggleJoinQueue(this.props.queue)
+    const inQueue = this.props.queue.inQueue
     const renderButtons = () =>(
-      this.props.queue.inQueue
-      ? <div className="list__blue nomargin center red" onClick={()=>this.model.leaveQueue(this.props.queue)}>Leave Queue</div>
-      : <div className="list__blue nomargin center" onClick={()=>this.model.joinQueue(this.props.queue)}>Join Queue</div>
+      inQueue
+      ? <div className="list__blue nomargin center red" onClick={toggle}>
+          Leave Queue
+        </div>
+      : <div className="list__blue nomargin center" onClick={toggle}>
+          Join Queue
+        </div>
     )
-
     return (
       <Page renderToolbar={() => <CustomToolbar/>}>
         <div className="pagePadding">
@@ -118,7 +124,7 @@ export default class DetailPage extends Component {
               <div className="clearBoth"></div>
             </div>
             <div className="clearBoth"></div>
-            <br />  
+            <br />
 
               {renderButtons()}
 
