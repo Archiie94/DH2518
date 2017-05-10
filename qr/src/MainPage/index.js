@@ -4,13 +4,13 @@ import GoogleMapReact from 'google-map-react'
 import {Toolbar, Page, Button, Row, Col, Icon} from 'react-onsenui'
 import './index.css'
 import model from '../model'
-import Marker from './../Marker'
 
 import CustomToolbar from './../CustomToolbar'
 import DetailPage from './../DetailPage'
+import Marker from './../Marker'
 
 export default class MainPage extends React.Component {
-constructor(props) {
+  constructor(props) {
     super(props)
     this.pushPage = this.pushPage.bind(this)
     this.notify = this.notify.bind(this)
@@ -96,10 +96,9 @@ constructor(props) {
     )
     const renderMarker = queue => (
       <Marker
-        lat={queue.coordinates.lat}
-        lng={queue.coordinates.lng}
-        key={queue.id}
-        text={'Systembolaget Birger Jarlsgatan'}
+        {...queue.coordinates}
+        queue={queue}
+        click={this.pushPage}
       />
     )
     const renderMap = () => (
@@ -132,7 +131,7 @@ constructor(props) {
             : renderList()
           }
         </div>
-        <ons-fab position="bottom left" 
+        <ons-fab position="bottom left"
                  onClick={this.model.toggleMapMode}
                  ripple></ons-fab>
       </Page>
