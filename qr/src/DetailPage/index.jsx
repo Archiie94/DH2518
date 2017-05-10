@@ -1,3 +1,5 @@
+import R from 'ramda'
+
 import React, { Component } from 'react'
 import GoogleMapReact from 'google-map-react'
 import {Page, Dialog} from 'react-onsenui'
@@ -14,6 +16,7 @@ export default class DetailPage extends Component {
     this.notify = this.notify.bind(this)
     this.model = model
     this.toggleChatMode = this.toggleChatMode.bind(this);
+    this.toggleJoinQueue = this.toggleJoinQueue.bind(this)
     this.state = {
       chatMode: false
     }
@@ -23,6 +26,16 @@ export default class DetailPage extends Component {
       chatMode: state
     })
   }
+
+  toggleJoinQueue(queue) {
+    console.log(queue)
+    if (queue.inQueue) {
+      this.model.leaveQueue(queue)
+    } else {
+      this.model.joinQueue(queue)
+    }
+  }
+
   componentDidMount() {
     this.model.subscribe(this)
   }
@@ -45,6 +58,12 @@ export default class DetailPage extends Component {
   render() {
     const center = { lat: 59.3446561, lng: 18.0555958 }
     const zoom = 11
+
+    const renderButtons = () =>(
+              this.props.queue.inQueue
+              ? <div className="list__blue nomargin center red" onClick={()=>this.model.leaveQueue(this.props.queue)}>Leave Queue</div>
+              : <div className="list__blue nomargin center" onClick={()=>this.model.joinQueue(this.props.queue)}>Join Queue</div>
+      )
     return (
       <Page renderToolbar={() => <CustomToolbar/>}>
         <div className="pagePadding">
@@ -99,10 +118,10 @@ export default class DetailPage extends Component {
               <div className="clearBoth"></div>
             </div>
             <div className="clearBoth"></div>
-            <br />
-            <div className="list__blue nomargin center">
-              Join Queue
-            </div>
+            <br />  
+
+              {renderButtons()}
+
             <br />
             <Dialog isOpen={this.state.chatMode} className='displayChat'>
               <div className='displayChat__content'>
