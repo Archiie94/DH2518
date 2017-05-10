@@ -1,5 +1,3 @@
-import R from 'ramda'
-
 import React, { Component } from 'react'
 import GoogleMapReact from 'google-map-react'
 import {Page, Dialog} from 'react-onsenui'
@@ -60,10 +58,11 @@ export default class DetailPage extends Component {
     const zoom = 11
 
     const renderButtons = () =>(
-              this.props.queue.inQueue
-              ? <div className="list__blue nomargin center red" onClick={()=>this.model.leaveQueue(this.props.queue)}>Leave Queue</div>
-              : <div className="list__blue nomargin center" onClick={()=>this.model.joinQueue(this.props.queue)}>Join Queue</div>
-      )
+      this.props.queue.inQueue
+      ? <div className="list__blue nomargin center red" onClick={()=>this.model.leaveQueue(this.props.queue)}>Leave Queue</div>
+      : <div className="list__blue nomargin center" onClick={()=>this.model.joinQueue(this.props.queue)}>Join Queue</div>
+    )
+
     return (
       <Page renderToolbar={() => <CustomToolbar/>}>
         <div className="pagePadding">
