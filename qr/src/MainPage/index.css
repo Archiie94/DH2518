@@ -12,3 +12,8 @@
 	margin-left: 3px;
 }
 .main__circle_adjuster {padding-top: 3px;}
+
+.main__map-wrapper {
+  height: 100vh;
+}
+

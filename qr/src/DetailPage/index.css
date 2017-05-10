@@ -63,15 +63,11 @@
     margin-right: 20px;
     color: #f00;
 }
-.displayChat{
-    display: block;
-    position: absolute;
-    background: #FFF;
-    z-index: 9999;
-    margin-top: -200px;
-    height: 200px;
-    width: 100%;
-    left: 0px;
-    border-top: 1px solid #ccc;
-    padding: 10px;
+.dialog-container {
+  height: 100vh !important;
+  width: 100vw;
+}
+.displayChat__content {
+  padding: 20px;
+  height: 100%;
 }

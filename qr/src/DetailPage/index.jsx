@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import GoogleMapReact from 'google-map-react'
-import {Page} from 'react-onsenui'
+import {Page, Dialog} from 'react-onsenui'
 import './index.css'
 import model from '../model'
 import CustomToolbar from './../CustomToolbar'
+import Chat from './../Chat'
 import Marker from './../Marker'
 
 export default class DetailPage extends Component {
@@ -13,7 +14,7 @@ export default class DetailPage extends Component {
     this.notify = this.notify.bind(this)
     this.model = model
     this.toggleChatMode = this.toggleChatMode.bind(this);
-    this.state = { 
+    this.state = {
       chatMode: false
     }
   }
@@ -30,11 +31,15 @@ export default class DetailPage extends Component {
     this.model.unsubscribe(this)
   }
 
-  notify(newState) {
-    this.setState(newState)
+  notify(updates) {
+    // Merge in the updates from the model into our local state
+    const updatedState = R.toPairs(updates).reduce((acc, [key, val]) =>
+      R.assoc(key, val, acc)
+      , this.state)
+    this.setState(updatedState)
   }
 
-  // To check if 
+  // To check if
   // this.props.queue.inQueue;
 
   render() {
@@ -93,24 +98,20 @@ export default class DetailPage extends Component {
               </div>
               <div className="clearBoth"></div>
             </div>
-            
             <div className="clearBoth"></div>
             <br />
             <div className="list__blue nomargin center">
               Join Queue
             </div>
             <br />
-            
-            <div className={ this.state.chatMode ? 'displayChat' : 'hidden' }>
-              <div className="closeChatBox" onClick={()=> this.toggleChatMode(false) }>
-                <ons-icon icon="ion-close-circled"></ons-icon>
+            <Dialog isOpen={this.state.chatMode} className='displayChat'>
+              <div className='displayChat__content'>
+                <div className="closeChatBox" onClick={()=> this.toggleChatMode(false) }>
+                  <ons-icon icon="ion-close-circled"></ons-icon>
+                </div>
+                <Chat/>
               </div>
-              <strong>Talking with Försäkringskassan</strong><br /><br />
-              <strong>You sent</strong><br />
-              <small>HEELLLOOOO</small><br />
-              <strong>Admin sent</strong><br />
-              <small>HEELLLOOOO</small><br />
-            </div>
+            </Dialog>
             <div className="lockToBottom">
               <div className="left customSearch">
                 <input placeholder="Need help?" type="search" className="search-input helpbar width100" />
