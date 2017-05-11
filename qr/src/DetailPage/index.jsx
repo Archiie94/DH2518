@@ -1,3 +1,4 @@
+import R from 'ramda'
 import React, { Component } from 'react'
 import GoogleMapReact from 'google-map-react'
 import {Page, Dialog} from 'react-onsenui'
@@ -14,6 +15,7 @@ export default class DetailPage extends Component {
     this.notify = this.notify.bind(this)
     this.model = model
     this.toggleChatMode = this.toggleChatMode.bind(this);
+    this.toggleJoinQueue = this.toggleJoinQueue.bind(this)
     this.state = {
       chatMode: false
     }
@@ -23,6 +25,18 @@ export default class DetailPage extends Component {
       chatMode: state
     })
   }
+
+  toggleJoinQueue(queue) {
+    console.log(queue)
+    if (queue.inQueue) {
+      this.model.leaveQueue(queue)
+    } else {
+      this.model.joinQueue(queue)
+    }
+    //FIXME not the right way to do it
+    queue.inQueue = ! queue.inQueue
+  }
+
   componentDidMount() {
     this.model.subscribe(this)
   }
@@ -52,6 +66,23 @@ export default class DetailPage extends Component {
         queue={queue}
       />
     )
+    const queue = this.props.queue
+    const toggle = () => this.toggleJoinQueue(this.props.queue)
+    const inQueue = this.props.queue.inQueue
+    const renderButtons = () =>(
+      inQueue
+      ? <div className="button-wrapper">
+          <div className="list__blue center add-button">
+            Add 5 minutes
+          </div>
+          <div className="list__blue center red leave-button" onClick={toggle}>
+            Leave Queue
+          </div>
+        </div>
+      : <div className="list__blue nomargin center" onClick={toggle}>
+          Join Queue
+        </div>
+    )
     return (
       <Page renderToolbar={() => <CustomToolbar/>}>
         <div className="pagePadding">
@@ -66,7 +97,7 @@ export default class DetailPage extends Component {
           <div className="detail-content">
             <br />
             <strong>Försäkringskassan</strong><br />
-            <small>Roslagsgatan 29</small><br />
+            <small>{queue.address}</small><br />
             <small>Måndag - Fredag: 8-18</small>
 
             <div className="clearBoth"></div>
@@ -103,9 +134,9 @@ export default class DetailPage extends Component {
             </div>
             <div className="clearBoth"></div>
             <br />
-            <div className="list__blue nomargin center">
-              Join Queue
-            </div>
+
+              {renderButtons()}
+
             <br />
             <Dialog isOpen={this.state.chatMode} className='displayChat'>
               <div className='displayChat__content'>
@@ -117,9 +148,9 @@ export default class DetailPage extends Component {
             </Dialog>
             <div className="lockToBottom">
               <div className="left customSearch">
-                <input placeholder="Need help?" type="search" className="search-input helpbar width100" />
+                <input onClick={()=> this.toggleChatMode(true) } placeholder="Need help?" type="search" className="search-input helpbar width100" />
               </div>
-              <div onClick={()=> this.toggleChatMode(true) } className="right customSearch list__blue nopadding nomargin">
+              <div className="right customSearch list__blue nopadding nomargin">
                Send
               </div>
             </div>

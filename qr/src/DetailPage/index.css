@@ -71,3 +71,29 @@
   padding: 20px;
   height: 100%;
 }
+
+.inline {
+   display:inline-block;
+   margin-right:5px;
+}
+
+
+.red{
+    background-color: red;
+}
+
+.button-wrapper {
+    width: 100%;
+    overflow: hidden; /* will contain if #first is longer than #second */
+}
+.add-button {
+    width:45%;
+    float:left; /* add this */
+    background-color: green;
+    margin: 0px;
+    margin-right: 5px;
+}
+.leave-button {
+    overflow: hidden; /* if you don't want #second to wrap below #first */
+    margin: 0px;
+}

@@ -1,8 +1,9 @@
+import R from 'ramda'
 import React, { Component } from 'react'
 import './index.css'
 import model from '../model'
 
-export default class DetailPage extends Component {
+export default class Chat extends Component {
 
   constructor(props) {
     super(props)
@@ -39,8 +40,6 @@ export default class DetailPage extends Component {
   }
 
   render() {
-    const center = { lat: 59.3446561, lng: 18.0555958 }
-    const zoom = 11
     return (
       <div className="chat">
         <div className="chat__messages">
