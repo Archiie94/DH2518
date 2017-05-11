@@ -54,8 +54,8 @@ export default class MainPage extends React.Component {
     };
   }
 
-  pushPage(place) {
-    this.props.navigator.pushPage({component: () => <DetailPage queueId={place.id}/>})
+  pushPage(id) {
+    this.props.navigator.pushPage({component: () => <DetailPage queueId={id}/>})
   }
 
   renderToolbar() {
@@ -70,14 +70,14 @@ export default class MainPage extends React.Component {
     const { places, mapMode } = this.model.getState()
     const center = { lat: 59.3446561, lng: 18.0555958 }
     const zoom = 16
-    const renderQueue = (queue) => (
-      <div key={queue.id}
+    const renderQueue = (place) => (
+      <div key={place.id}
            className="list__blue">
 
         <div className="left width60"
-             onClick={() => this.pushPage(queue)}>
-          <p className="nomargin"><b>{queue.id}</b></p>
-          <small>{queue.address}</small>
+             onClick={() => this.pushPage(place.id)}>
+          <p className="nomargin"><b>{place.id}</b></p>
+          <small>{place.address}</small>
         </div>
 
         <div className="right width40">
@@ -114,7 +114,7 @@ export default class MainPage extends React.Component {
         <Marker
         {...place.coordinates}
         queue={place}
-        click={this.pushPage}
+        click={() => this.pushPage(place.id)}
         />
       )
     }

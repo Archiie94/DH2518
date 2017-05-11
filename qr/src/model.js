@@ -4,11 +4,11 @@ import * as firebase from 'firebase'
 class DataManager {
 
   constructor() {
-    this.createQueue = this.createQueue.bind(this);
-    this.setPropInQueue = this.setPropInQueue.bind(this);
-
     const UUID_KEY = 'userId'
     if (!localStorage.getItem(UUID_KEY)) {
+      // Generate a random user id and store it when the app is launched the first time
+      // This id will be used on firebase. Techinically it should be globally unique,
+      // but for our purposes this is good enough
       localStorage.setItem(UUID_KEY, Math.random() + "")
     }
     const uuid = localStorage.getItem(UUID_KEY)
@@ -42,11 +42,18 @@ class DataManager {
     this.subscribe = this.subscribe.bind(this);
     this.unsubscribe = this.unsubscribe.bind(this);
     this.findById = this.findById.bind(this);
+    this.findIndexById = this.findIndexById.bind(this);
 
     const { firebaseApp } = this.state
     const self = this
     this.state.storeRef.on('value', snapshot => self.setState({ places: snapshot.val() }))
-    this.state.queuesRef.on('value', snapshot => self.setState({ queues: snapshot.val() }))
+    this.state.queuesRef.on('value', snapshot => {
+      const queues = snapshot.val().map(q =>
+        // Get rid of the impostors!
+        R.assoc('queue', q.queue.filter(p => p.id !== 'impostor'), q)
+      )
+      self.setState({ queues: queues })
+    })
   }
 
   getState() { return this.state }
@@ -60,11 +67,20 @@ class DataManager {
 
   isInQueue(id) {
     const { user } = this.state
-    const queue = R.find(R.propEq('id', id), this.state.queues)
+    const queue = this.findById(id, this.state.queues)
+    console.log('looking for')
+    console.log(id)
+    console.log('in')
+    console.log(this.state.queues)
+    console.log('found')
     console.log(queue)
-    return queue 
-      ? this.findById(user.id, queue.queue)
+    return queue
+      ? !!this.findById(user.id, queue.queue)
       : false
+  }
+
+  findIndexById(id, arr) {
+    return R.findIndex(R.propEq('id', id), R.filter(a => typeof a !== 'undefined', arr))
   }
 
   findById(id, arr) {
@@ -85,55 +101,18 @@ class DataManager {
     this.setState({mapMode: !mapMode })
   }
 
-  createQueue(id, coordinates, address, hours) {
-    return {
-      id: id,
-      inQueue: false,
-      address: address,
-      coordinates: coordinates,
-      hours: hours
-    }
-  }
-
-  setPropInQueue(prop, value, id) {
-    const index = R.indexOf(this.findById(id, this.state.queues), this.state.queues)
-    console.log('1')
-    if (index == -1) {
-      console.log('2')
-      return this.state.queues.concat({id: id, queue: value})
-    } else {
-      console.log('3')
-      const propLens = R.compose(R.lensIndex(index), R.lensProp(prop))
-      console.log(this.state.queues)
-      console.log(index)
-      console.log(R.view(R.lensIndex(index), this.state.queues))
-      console.log(R.view(propLens,this.state.queues))
-      return R.set(propLens, value, this.state.queues)
-    }
-  }
-
   joinQueue(id) {
+    // TODO handle joining/leaving queue failure?
     const { queues, user } = this.state
-    const currentQueue = this.findById(id, queues) || { id: id, queue: [] }
-    console.log('cuur')
-    console.log(currentQueue)
-    const updatedQueues = this.setPropInQueue('queue', currentQueue.queue.concat([user]), id)
-    console.log('12')
-    // this.setState({queues: updatedQueues})
-    console.log('13')
-    // Update the value on firebase
-    const impostor = { id: 'impostor', name: 'not a real person' }
-    const index = R.indexOf(this.findById(id, queues), queues)
-    console.log('14')
+    const self = this
     this.state.queuesRef.transaction(post => {
-    console.log('15')
       if (post) {
+        const index = self.findIndexById(id, post)
         if (index != -1) {
-          console.log('2nd')
-          console.log(post[index])
           post[index].queue.push(user)
         } else {
           // Create the queue if it does not exist
+          const impostor = { id: 'impostor', name: 'not a real person' }
           post.push({ id: id, queue: [user, impostor] })
         }
       }
@@ -142,24 +121,14 @@ class DataManager {
   }
 
   leaveQueue(id) {
-    const { queues, user } = this.state
-    // const currentQueue = this.findById(id, queues) || { id: id, queue: [] }
-    // console.log('current queue')
-    // console.log(currentQueue)
-    // const updatedQueues = this.setPropInQueue('queue', R.without([user], currentQueue.queue), id)
-    // console.log(updatedQueues)
-    // this.setState({queues: updatedQueues})
-    // Update the value on firebase
-    console.log('leaving')
-    console.log(id)
-    const index = R.indexOf(this.findById(id, queues), queues)
-    const userIndex = R.indexOf(this.findById(user.id, queues[index].queue), queues[index].queue)
+    // Leave queue on firebase
+    const { user } = this.state
     this.state.queuesRef.transaction(post => {
       if (post) {
-        console.log(queues[index])
-        console.log(userIndex)
-        console.log(index)
-        delete post[index].queue[userIndex]
+        const queueIndex = this.findIndexById(id, post)
+        const userObj = this.findById(user.id, post[queueIndex].queue)
+        const queue = post[queueIndex].queue
+        post[queueIndex].queue = R.without([userObj], queue)
       }
       return post
     })
@@ -169,3 +138,4 @@ class DataManager {
 
 const model = new DataManager()
 export default model
+
