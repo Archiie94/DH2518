@@ -17,6 +17,7 @@
   height: calc(100vh - 44px);
 }
 
+.map__button,
 .fab--bottom__left {
 	top: auto;
     bottom: 15px !important;
