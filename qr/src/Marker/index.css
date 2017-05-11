@@ -1,23 +1,28 @@
-.marker-content p {
-  margin: 4px;
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
 }
 
-.marker-content {
-  width: 100px;
-  height: 30px;
-  z-index: 1;
-  color: white;
-  text-overflow: ellipsis;
-  border: 0px solid;
+.icon{
+  display:inline-block;
+
+}
+
+.marker-info{
+  position:absolute;
+  bottom: -27px;
+  left: 22px;
+  display:inline-block;
+  white-space: nowrap;
+  background-color: white;
+  float: left;
+  color: black;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
   border-radius: 5px;
-  box-shadow: 1px 1px 0.5px 0.5px rgba(0,0,0,0.5);
-}
-
-.marker-content .id {
-  font-size: 10px;
-}
-
-.marker-content .address {
-  font-size: 8px;
+  box-shadow:0 0 10px rgba(0, 0, 0, 0.3);
+  font-size: 1.3em;
 }
 

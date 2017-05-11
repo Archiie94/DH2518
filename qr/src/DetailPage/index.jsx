@@ -64,14 +64,18 @@ export default class DetailPage extends Component {
   render() {
     const { queues } = this.model.getState()
     const queue = R.find(R.propEq('id', this.props.queueId))(queues)
-    const center = { lat: 59.3446561, lng: 18.0555958 }
-    const zoom = 11
+    const center = queue.coordinates
+    const zoom = 17
     const renderMarker = queue => (
       <Marker
         {...queue.coordinates}
         queue={queue}
+        click={()=>{}}
       />
     )
+
+    const toggle = () => this.toggleJoinQueue(this.props.queue)
+    const inQueue = this.props.queue.inQueue
     const renderButtons = () =>(
       queue.inQueue
       ? <div className="button-wrapper">
@@ -95,7 +99,7 @@ export default class DetailPage extends Component {
               defaultZoom={zoom}
               options={this.createMapOptions}
             >
-              { queues.map(renderMarker) }
+              { renderMarker(queue) }
             </GoogleMapReact>
           </div>
           <div className="detail-content">
