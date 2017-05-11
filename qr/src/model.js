@@ -29,11 +29,7 @@ class DataManager {
   getState() { return this.state }
 
   setState(updates) {
-    // Reduce over the current state with the new values
-    const updatedState = R.toPairs(updates).reduce((acc, [key, val]) =>
-      R.assoc(key, val, acc)
-    , this.state)
-    this.state = updatedState
+    this.state = R.merge(this.state, updates)
     this.subscribers.forEach(sub => sub.notify(this.state))
   }
 

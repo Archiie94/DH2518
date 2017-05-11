@@ -42,14 +42,11 @@ export default class DetailPage extends Component {
   }
 
   toggleJoinQueue(queue) {
-    console.log(queue)
     if (queue.inQueue) {
       this.model.leaveQueue(queue)
     } else {
       this.model.joinQueue(queue)
     }
-    //FIXME not the right way to do it
-    queue.inQueue = ! queue.inQueue
   }
 
   componentDidMount() {
@@ -61,40 +58,31 @@ export default class DetailPage extends Component {
   }
 
   notify(updates) {
-    // Merge in the updates from the model into our local state
-    const updatedState = R.toPairs(updates).reduce((acc, [key, val]) =>
-      R.assoc(key, val, acc)
-      , this.state)
-    this.setState(updatedState)
+    this.setState(R.merge(this.state, updates))
   }
 
-  // To check if
-  // this.props.queue.inQueue;
-
   render() {
+    const { queues } = this.model.getState()
+    const queue = R.find(R.propEq('id', this.props.queueId))(queues)
     const center = { lat: 59.3446561, lng: 18.0555958 }
     const zoom = 11
-    const { queues } = this.model.getState()
     const renderMarker = queue => (
       <Marker
         {...queue.coordinates}
         queue={queue}
       />
     )
-    const queue = this.props.queue
-    const toggle = () => this.toggleJoinQueue(this.props.queue)
-    const inQueue = this.props.queue.inQueue
     const renderButtons = () =>(
-      inQueue
+      queue.inQueue
       ? <div className="button-wrapper">
           <div className="list__blue center add-button">
             Add 5 minutes
           </div>
-          <div className="list__blue center red leave-button" onClick={toggle}>
+          <div className="list__blue center red leave-button" onClick={() => this.toggleJoinQueue(queue)}>
             Leave Queue
           </div>
         </div>
-      : <div className="list__blue nomargin center" onClick={toggle}>
+      : <div className="list__blue nomargin center" onClick={this.toggleJoinQueue}>
           Join Queue
         </div>
     )

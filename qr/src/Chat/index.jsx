@@ -22,10 +22,7 @@ export default class Chat extends Component {
 
   notify(updates) {
     // Merge in the updates from the model into our local state
-    const updatedState = R.toPairs(updates).reduce((acc, [key, val]) =>
-      R.assoc(key, val, acc)
-      , this.state)
-    this.setState(updatedState)
+    this.setState(R.merge(this.state, updates))
   }
 
   sendMessage() {
