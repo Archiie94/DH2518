@@ -14,7 +14,7 @@
 .main__circle_adjuster {padding-top: 3px;}
 
 .main__map-wrapper {
-  height: calc(100vh - 44px);
+  height: 100vh;
 }
 
 .customButtonWidth {width: 40px;}
