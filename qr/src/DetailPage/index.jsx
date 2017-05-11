@@ -74,18 +74,18 @@ export default class DetailPage extends Component {
       />
     )
 
-    const toggle = () => this.toggleJoinQueue(this.props.queue)
+    const toggle = () => this.toggleJoinQueue(queue)
     const renderButtons = () =>(
       queue.inQueue
       ? <div className="button-wrapper">
           <div className="list__blue center add-button">
             Add 5 minutes
           </div>
-          <div className="list__blue center red leave-button" onClick={() => this.toggleJoinQueue(queue)}>
+          <div className="list__blue center red leave-button" onClick={toggle}>
             Leave Queue
           </div>
         </div>
-      : <div className="list__blue nomargin center" onClick={() => this.toggleJoinQueue(queue)}>
+      : <div className="list__blue nomargin center" onClick={toggle}>
           Join Queue
         </div>
     )
