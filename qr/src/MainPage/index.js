@@ -53,8 +53,8 @@ export default class MainPage extends React.Component {
 
   render() {
     const { queues, mapMode } = this.model.getState()
-    const center = { lat: 59.3446561, lng: 18.0555958 }
-    const zoom = 11
+    const center = { lat: 59.343404, lng: 18.061171 }
+    const zoom = 15
     const renderQueue = (queue) => (
       <div key={queue.id}
            className="list__blue">
@@ -105,7 +105,7 @@ export default class MainPage extends React.Component {
       <div className='main__map-wrapper'>
         <GoogleMapReact
           defaultCenter={center}
-          defaultZoom={11}
+          defaultZoom={zoom}
         >
           { queues.map(renderMarker) }
         </GoogleMapReact>
