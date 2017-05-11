@@ -89,6 +89,7 @@ export default class DetailPage extends Component {
           Join Queue
         </div>
     )
+    const directions = "https://www.google.com/maps/dir//" + queue.coordinates.lat + "," + queue.coordinates.lng
     return (
       <Page renderToolbar={() => <CustomToolbar/>}>
         <div className="pagePadding">
@@ -103,10 +104,15 @@ export default class DetailPage extends Component {
           </div>
           <div className="detail-content">
             <br />
-            <strong>{queue.id}</strong><br />
-            <small>{queue.address}</small><br />
-            <small>{queue.hours}</small>
-
+            <div className="left">
+              <strong>{queue.id}</strong><br />
+              <small>{queue.address}</small><br />
+              <small>{queue.hours}</small>
+            </div>
+            <div className="right">
+              <a className="directions text-blue" target="_blank" href={directions}>
+              </a>
+            </div>
             <div className="clearBoth"></div>
             <br />
 
