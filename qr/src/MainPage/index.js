@@ -74,22 +74,22 @@ export default class MainPage extends React.Component {
       <div key={queue.id}
            className="list__blue">
 
-        <div className="left width70"
+        <div className="left width60"
              onClick={() => this.pushPage(queue)}>
           <p className="nomargin"><b>{queue.id}</b></p>
           <small>{queue.address}</small>
         </div>
 
-        <div className="right width30">
+        <div className="right width40">
 
-          <div className="center inlineBlock" onClick={() => this.toggleJoinQueue(queue)}>
+          <div className="center inlineBlock customButtonWidth" onClick={() => this.toggleJoinQueue(queue)}>
             <Icon icon={queue.inQueue ? 'ion-close-circled' : 'ion-checkmark-circled'}
                       className={ 'main__icon_size ' + (queue.inQueue ? 'text-red' : '')}>
             </Icon>
             <br />
             <small>
               { queue.inQueue
-                  ? "Exit"
+                  ? "Leave"
                   : "Join"
               }
             </small>

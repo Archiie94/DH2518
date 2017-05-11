@@ -17,8 +17,9 @@
   height: calc(100vh - 44px);
 }
 
-.width70 {width:70%; word-wrap: break-all; word-break: break-all;}
-.width30 {width:30%; text-align: right;}
+.customButtonWidth {width: 40px;}
+.width60 {width:60%; word-wrap: break-all; word-break: break-all;}
+.width40 {width:40%; text-align: right;}
 
 .map__button {
 	top: auto;
