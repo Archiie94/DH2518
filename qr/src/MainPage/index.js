@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import GoogleMapReact from 'google-map-react'
 import {Toolbar, Page, Button, Row, Col, Icon} from 'react-onsenui'
 import './index.css'
+import R from 'ramda'
 import model from '../model'
 
 import CustomToolbar from './../CustomToolbar'
@@ -27,7 +28,7 @@ export default class MainPage extends React.Component {
   }
 
   notify(newState) {
-    this.setState(newState)
+    this.setState(R.merge(this.state, newState))
   }
 
   toggleJoinQueue(queue) {
@@ -40,7 +41,7 @@ export default class MainPage extends React.Component {
   }
 
   pushPage(queue) {
-    this.props.navigator.pushPage({component: () => <DetailPage queue={queue}/>})
+    this.props.navigator.pushPage({component: () => <DetailPage queueId={queue.id}/>})
   }
 
   renderToolbar() {
