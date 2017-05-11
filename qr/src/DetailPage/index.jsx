@@ -14,8 +14,9 @@ export default class DetailPage extends Component {
     super(props)
     this.notify = this.notify.bind(this)
     this.model = model
-    this.toggleChatMode = this.toggleChatMode.bind(this);
+    this.toggleChatMode = this.toggleChatMode.bind(this)
     this.toggleJoinQueue = this.toggleJoinQueue.bind(this)
+    this.createMapOptions = this.createMapOptions.bind(this)
     this.state = {
       chatMode: false
     }
@@ -26,15 +27,26 @@ export default class DetailPage extends Component {
     })
   }
 
+  createMapOptions(maps) {
+    // next props are exposed at maps
+    // "Animation", "ControlPosition", "MapTypeControlStyle", "MapTypeId",
+    // "NavigationControlStyle", "ScaleControlStyle", "StrokePosition", "SymbolPath", "ZoomControlStyle",
+    // "DirectionsStatus", "DirectionsTravelMode", "DirectionsUnitSystem", "DistanceMatrixStatus",
+    // "DistanceMatrixElementStatus", "ElevationStatus", "GeocoderLocationType", "GeocoderStatus", "KmlLayerStatus",
+    // "MaxZoomStatus", "StreetViewStatus", "TransitMode", "TransitRoutePreference", "TravelMode", "UnitSystem"
+    return {
+      zoomControl: false,
+      fullscreenControl: false,
+      mapTypeControl: false
+    };
+  }
+
   toggleJoinQueue(queue) {
-    console.log(queue)
     if (queue.inQueue) {
       this.model.leaveQueue(queue)
     } else {
       this.model.joinQueue(queue)
     }
-    //FIXME not the right way to do it
-    queue.inQueue = ! queue.inQueue
   }
 
   componentDidMount() {
@@ -46,21 +58,14 @@ export default class DetailPage extends Component {
   }
 
   notify(updates) {
-    // Merge in the updates from the model into our local state
-    const updatedState = R.toPairs(updates).reduce((acc, [key, val]) =>
-      R.assoc(key, val, acc)
-      , this.state)
-    this.setState(updatedState)
+    this.setState(R.merge(this.state, updates))
   }
 
-  // To check if
-  // this.props.queue.inQueue;
-
   render() {
-    const queue = this.props.queue
+    const { queues } = this.model.getState()
+    const queue = R.find(R.propEq('id', this.props.queueId))(queues)
     const center = queue.coordinates
     const zoom = 17
-    // const { queues } = this.model.getState()
     const renderMarker = queue => (
       <Marker
         {...queue.coordinates}
@@ -68,19 +73,20 @@ export default class DetailPage extends Component {
         click={()=>{}}
       />
     )
+
     const toggle = () => this.toggleJoinQueue(this.props.queue)
     const inQueue = this.props.queue.inQueue
     const renderButtons = () =>(
-      inQueue
+      queue.inQueue
       ? <div className="button-wrapper">
           <div className="list__blue center add-button">
             Add 5 minutes
           </div>
-          <div className="list__blue center red leave-button" onClick={toggle}>
+          <div className="list__blue center red leave-button" onClick={() => this.toggleJoinQueue(queue)}>
             Leave Queue
           </div>
         </div>
-      : <div className="list__blue nomargin center" onClick={toggle}>
+      : <div className="list__blue nomargin center" onClick={this.toggleJoinQueue}>
           Join Queue
         </div>
     )
@@ -91,6 +97,7 @@ export default class DetailPage extends Component {
             <GoogleMapReact
               defaultCenter={center}
               defaultZoom={zoom}
+              options={this.createMapOptions}
             >
               { renderMarker(queue) }
             </GoogleMapReact>

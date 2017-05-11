@@ -48,16 +48,6 @@
   padding: 3%;
 }
 
-/* Customized Toolbar
- */
-.toolbar {
-  background: #333;
-  color: #FFF;
-}
-.toolbar-button,
-.toolbar__title,
-.toolbar a {color:#FFF;}
-
 /* Customized Lists
  */
 .custom__header {padding:10px; font-size:18px;border-bottom: 1px solid #CCC;background:#EEE;}
@@ -80,8 +70,3 @@
   height: 500px;
   width: 100%;
 }
-.back-button {
-  color: white;
-}
-
-
