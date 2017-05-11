@@ -75,7 +75,6 @@ export default class DetailPage extends Component {
     )
 
     const toggle = () => this.toggleJoinQueue(this.props.queue)
-    const inQueue = this.props.queue.inQueue
     const renderButtons = () =>(
       queue.inQueue
       ? <div className="button-wrapper">
