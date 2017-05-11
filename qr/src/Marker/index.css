@@ -10,6 +10,7 @@
   text-overflow: ellipsis;
   border: 0px solid;
   border-radius: 5px;
+  box-shadow: 1px 1px 0.5px 0.5px rgba(0,0,0,0.5);
 }
 
 .marker-content .id {
