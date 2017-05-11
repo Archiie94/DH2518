@@ -17,9 +17,9 @@
   height: calc(100vh - 44px);
 }
 
-.map__button,
-.fab--bottom__left {
+.map__button {
 	top: auto;
+    position: absolute;
     bottom: 15px !important;
     left: 10px !important;
     right: auto;
@@ -30,7 +30,7 @@
     background: #07c;
     box-shadow: 0 0 4px #333;
 }
-.fab--icon__center {
+.map_icon__center {
 	text-align: center;
     width: 40px;
     padding-top: 5px;

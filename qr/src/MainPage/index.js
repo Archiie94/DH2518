@@ -125,11 +125,11 @@ export default class MainPage extends React.Component {
             : renderList()
           }
         </div>
-        <ons-fab position="bottom left" class="map__button"
-                 onClick={this.model.toggleMapMode}
-                 ripple>
-           <ons-icon icon={mapMode ? 'ion-ios-list-outline' : 'ion-map'} class="fab--icon__center"></ons-icon>
-        </ons-fab>
+        <div className="map__button">
+            <ons-icon onClick={this.model.toggleMapMode} 
+                    icon={mapMode ? 'ion-ios-list-outline' : 'ion-map'} 
+                    class="map_icon__center"></ons-icon>
+        </div>
       </Page>
     )
   }
