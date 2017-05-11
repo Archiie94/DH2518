@@ -114,12 +114,6 @@ export default class MainPage extends React.Component {
     const renderList = () => (
       <div>
         <div className="custom__header">Nearby Queues</div>
-        <Row className='custom__row-header'>
-          <Col width="40%">Store</Col>
-          <Col>Place</Col>
-          <Col class='center'>Address</Col>
-          <Col></Col>
-        </Row>
         { queues.map(renderQueue) }
       </div>
     )
@@ -133,7 +127,9 @@ export default class MainPage extends React.Component {
         </div>
         <ons-fab position="bottom left"
                  onClick={this.model.toggleMapMode}
-                 ripple></ons-fab>
+                 ripple>
+           <ons-icon icon={mapMode ? 'ion-ios-list-outline' : 'ion-map'} class="fab--icon__center"></ons-icon>
+        </ons-fab>
       </Page>
     )
   }
