@@ -33,11 +33,10 @@ export default class MainPage extends React.Component {
   }
 
   toggleJoinQueue(queue) {
-    console.log(queue)
-    if (queue.inQueue) {
-      this.model.leaveQueue(queue)
+    if (model.isInQueue(queue.id)) {
+      this.model.leaveQueue(queue.id)
     } else {
-      this.model.joinQueue(queue)
+      this.model.joinQueue(queue.id)
     }
   }
 
@@ -55,8 +54,8 @@ export default class MainPage extends React.Component {
     };
   }
 
-  pushPage(queue) {
-    this.props.navigator.pushPage({component: () => <DetailPage queueId={queue.id}/>})
+  pushPage(place) {
+    this.props.navigator.pushPage({component: () => <DetailPage queueId={place.id}/>})
   }
 
   renderToolbar() {
@@ -68,9 +67,9 @@ export default class MainPage extends React.Component {
   }
 
   render() {
-    const { places, queues, mapMode } = this.model.getState()
+    const { places, mapMode } = this.model.getState()
     const center = { lat: 59.3446561, lng: 18.0555958 }
-    const zoom = 11
+    const zoom = 16
     const renderQueue = (queue) => (
       <div key={queue.id}
            className="list__blue">
@@ -84,12 +83,12 @@ export default class MainPage extends React.Component {
         <div className="right width40">
 
           <div className="center inlineBlock customButtonWidth" onClick={() => this.toggleJoinQueue(queue)}>
-            <Icon icon={queue.inQueue ? 'ion-close-circled' : 'ion-checkmark-circled'}
-                      className={ 'main__icon_size ' + (queue.inQueue ? 'text-red' : '')}>
+            <Icon icon={model.isInQueue(queue.id) ? 'ion-close-circled' : 'ion-checkmark-circled'}
+                      className={ 'main__icon_size ' + (model.isInQueue(queue.id) ? 'text-red' : '')}>
             </Icon>
             <br />
             <small>
-              { queue.inQueue
+              { model.isInQueue(queue.id)
                   ? "Leave"
                   : "Join"
               }
@@ -111,7 +110,6 @@ export default class MainPage extends React.Component {
       </div>
     )
     const renderMarker = place => {
-      console.log('marker')
       return (
         <Marker
         {...place.coordinates}
@@ -126,7 +124,6 @@ export default class MainPage extends React.Component {
           defaultCenter={center}
           defaultZoom={zoom}
           options={this.createMapOptions}
-
         >
           { places.map(renderMarker) }
         </GoogleMapReact>

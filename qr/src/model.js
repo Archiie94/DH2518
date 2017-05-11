@@ -7,6 +7,12 @@ class DataManager {
     this.createQueue = this.createQueue.bind(this);
     this.setPropInQueue = this.setPropInQueue.bind(this);
 
+    const UUID_KEY = 'userId'
+    if (!localStorage.getItem(UUID_KEY)) {
+      localStorage.setItem(UUID_KEY, Math.random() + "")
+    }
+    const uuid = localStorage.getItem(UUID_KEY)
+
     const config = {
       apiKey: "AIzaSyChKntR2x01yHa_5KMkXOItmHWNEZVIHcs",
       authDomain: "queuer-ff37b.firebaseapp.com",
@@ -18,15 +24,15 @@ class DataManager {
     this.subscribers = []
     this.state = {
       places: [],
-      queues: [
-        this.createQueue('Försäkringskassan', {lat: 59.347392, lng: 18.058927}, 'Roslagsgatan 23', 'Måndag-Fredag: 8-18'),
-        this.createQueue('Polisen', {lat: 59.344329, lng: 18.056374}, 'Odengatan 48', 'Måndag-Torsdag: 11-18'),
-        this.createQueue('SEB', {lat: 59.343224, lng: 18.059227},'Döbelnsgatan 63', 'Måndag-Fredag: 12-16'),
-        this.createQueue('Arbetsförmedlingen', {lat: 59.342748, lng: 18.06295}, 'Kungstensgatan 15', 'Måndag-Fredag: 8-17'),
-        this.createQueue('Vaccin Direkt', {lat: 59.338814, lng: 18.05721}, 'Tegnérgatan 37', 'Måndag-Söndag 8-20')
-      ],
+      queues: [],
       mapMode: true,
-      firebaseApp: firebase.initializeApp(config)
+      firebaseApp: firebase.initializeApp(config),
+      user: {
+        id: uuid,
+        name: 'Jepz'
+      },
+      storeRef: firebase.database().ref('places'),
+      queuesRef: firebase.database().ref('queues')
     }
 
     // Public API
@@ -35,13 +41,12 @@ class DataManager {
     this.toggleMapMode = this.toggleMapMode.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.unsubscribe = this.unsubscribe.bind(this);
+    this.findById = this.findById.bind(this);
 
     const { firebaseApp } = this.state
-    const storeRef = firebase.database().ref('places')
     const self = this
-    storeRef.on('value', function(snapshot) {
-      self.setState({ places: snapshot.val() })
-    })
+    this.state.storeRef.on('value', snapshot => self.setState({ places: snapshot.val() }))
+    this.state.queuesRef.on('value', snapshot => self.setState({ queues: snapshot.val() }))
   }
 
   getState() { return this.state }
@@ -49,6 +54,21 @@ class DataManager {
   setState(updates) {
     this.state = R.merge(this.state, updates)
     this.subscribers.forEach(sub => sub.notify(this.state))
+    console.log('new state')
+    console.log(this.state)
+  }
+
+  isInQueue(id) {
+    const { user } = this.state
+    const queue = R.find(R.propEq('id', id), this.state.queues)
+    console.log(queue)
+    return queue 
+      ? this.findById(user.id, queue.queue)
+      : false
+  }
+
+  findById(id, arr) {
+    return R.find(R.propEq('id', id), R.filter(a => typeof a !== 'undefined', arr))
   }
 
   subscribe(subscriber) {
@@ -75,20 +95,74 @@ class DataManager {
     }
   }
 
-  setPropInQueue(prop, value, queue) {
-    const index = R.indexOf(queue, this.state.queues);
-    const propLens = R.compose(R.lensIndex(index), R.lensProp(prop))
-    return R.set(propLens, value, this.state.queues)
+  setPropInQueue(prop, value, id) {
+    const index = R.indexOf(this.findById(id, this.state.queues), this.state.queues)
+    console.log('1')
+    if (index == -1) {
+      console.log('2')
+      return this.state.queues.concat({id: id, queue: value})
+    } else {
+      console.log('3')
+      const propLens = R.compose(R.lensIndex(index), R.lensProp(prop))
+      console.log(this.state.queues)
+      console.log(index)
+      console.log(R.view(R.lensIndex(index), this.state.queues))
+      console.log(R.view(propLens,this.state.queues))
+      return R.set(propLens, value, this.state.queues)
+    }
   }
 
-  joinQueue(queue) {
-    const updatedQueues = this.setPropInQueue('inQueue', true, queue)
-    this.setState({queues: updatedQueues})
+  joinQueue(id) {
+    const { queues, user } = this.state
+    const currentQueue = this.findById(id, queues) || { id: id, queue: [] }
+    console.log('cuur')
+    console.log(currentQueue)
+    const updatedQueues = this.setPropInQueue('queue', currentQueue.queue.concat([user]), id)
+    console.log('12')
+    // this.setState({queues: updatedQueues})
+    console.log('13')
+    // Update the value on firebase
+    const impostor = { id: 'impostor', name: 'not a real person' }
+    const index = R.indexOf(this.findById(id, queues), queues)
+    console.log('14')
+    this.state.queuesRef.transaction(post => {
+    console.log('15')
+      if (post) {
+        if (index != -1) {
+          console.log('2nd')
+          console.log(post[index])
+          post[index].queue.push(user)
+        } else {
+          // Create the queue if it does not exist
+          post.push({ id: id, queue: [user, impostor] })
+        }
+      }
+      return post
+    })
   }
 
-  leaveQueue(queue) {
-    const updatedQueues = this.setPropInQueue('inQueue', false, queue)
-    this.setState({queues: updatedQueues})
+  leaveQueue(id) {
+    const { queues, user } = this.state
+    // const currentQueue = this.findById(id, queues) || { id: id, queue: [] }
+    // console.log('current queue')
+    // console.log(currentQueue)
+    // const updatedQueues = this.setPropInQueue('queue', R.without([user], currentQueue.queue), id)
+    // console.log(updatedQueues)
+    // this.setState({queues: updatedQueues})
+    // Update the value on firebase
+    console.log('leaving')
+    console.log(id)
+    const index = R.indexOf(this.findById(id, queues), queues)
+    const userIndex = R.indexOf(this.findById(user.id, queues[index].queue), queues[index].queue)
+    this.state.queuesRef.transaction(post => {
+      if (post) {
+        console.log(queues[index])
+        console.log(userIndex)
+        console.log(index)
+        delete post[index].queue[userIndex]
+      }
+      return post
+    })
   }
 
 }

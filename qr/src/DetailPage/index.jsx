@@ -41,11 +41,11 @@ export default class DetailPage extends Component {
     };
   }
 
-  toggleJoinQueue(queue) {
-    if (queue.inQueue) {
-      this.model.leaveQueue(queue)
+  toggleJoinQueue(id) {
+    if (model.isInQueue(id)) {
+      this.model.leaveQueue(id)
     } else {
-      this.model.joinQueue(queue)
+      this.model.joinQueue(id)
     }
   }
 
@@ -62,10 +62,12 @@ export default class DetailPage extends Component {
   }
 
   render() {
-    const { queues } = this.model.getState()
-    const queue = R.find(R.propEq('id', this.props.queueId))(queues)
-    const center = queue.coordinates
-    const zoom = 17
+    const { places, queues, user } = this.model.getState()
+    const place = R.find(R.propEq('id', this.props.queueId))(places)
+    const q = R.find(R.propEq('id', this.props.queueId))(queues) || {}
+    const queue = q.queue || [] // Empty if the queue is empty
+    const center = { lat: 59.3446561, lng: 18.0555958 }
+    const zoom = 11
     const renderMarker = queue => (
       <Marker
         {...queue.coordinates}
@@ -75,21 +77,22 @@ export default class DetailPage extends Component {
     )
 
     const toggle = () => this.toggleJoinQueue(queue)
+    const directions = "https://www.google.com/maps/dir//" + queue.coordinates.lat + "," + queue.coordinates.lng
     const renderButtons = () =>(
-      queue.inQueue
+      model.isInQueue(this.props.queueId)
       ? <div className="button-wrapper">
           <div className="list__blue center add-button">
             Add 5 minutes
           </div>
-          <div className="list__blue center red leave-button" onClick={toggle}>
+          <div className="list__blue center red leave-button" onClick={() => this.toggleJoinQueue(this.props.queueId)}>
             Leave Queue
           </div>
         </div>
-      : <div className="list__blue nomargin center" onClick={toggle}>
+      : <div className="list__blue nomargin center" onClick={() => this.toggleJoinQueue(this.props.queueId)}>
           Join Queue
         </div>
     )
-    const directions = "https://www.google.com/maps/dir//" + queue.coordinates.lat + "," + queue.coordinates.lng
+    const placeInLine = R.findIndex(R.propEq('id', user.id), queue) + 1;
     return (
       <Page renderToolbar={() => <CustomToolbar/>}>
         <div className="pagePadding">
@@ -99,15 +102,15 @@ export default class DetailPage extends Component {
               defaultZoom={zoom}
               options={this.createMapOptions}
             >
-              { renderMarker(queue) }
+              { places.map(renderMarker) }
             </GoogleMapReact>
           </div>
           <div className="detail-content">
             <br />
             <div className="left">
-              <strong>{queue.id}</strong><br />
-              <small>{queue.address}</small><br />
-              <small>{queue.hours}</small>
+              <strong>{place.id}</strong><br />
+              <small>{place.address}</small><br />
+              <small>{place.hours}</small>
             </div>
             <div className="right">
               <a className="directions text-blue" target="_blank" href={directions}>
@@ -120,12 +123,12 @@ export default class DetailPage extends Component {
               <div className="left">
                 <div className="detail__circle bg-blue">
                   <div className="detail__circle_adjustment">
-                    8
+                    {placeInLine == 0 ? queue.length : placeInLine}
                   </div>
                 </div>
               </div>
               <div className="right detail__custom_margin">
-                <strong>Persons</strong> <br />
+                <strong>{placeInLine == 1 ? 'Person' : 'People'}</strong> <br />
                 <small>Before you</small>
               </div>
               <div className="clearBoth"></div>
