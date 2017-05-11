@@ -32,11 +32,11 @@ export default class MainPage extends React.Component {
     this.setState(R.merge(this.state, newState))
   }
 
-  toggleJoinQueue(queue) {
-    if (model.isInQueue(queue.id)) {
-      this.model.leaveQueue(queue.id)
+  toggleJoinQueue(id) {
+    if (model.isInQueue(id)) {
+      this.model.leaveQueue(id)
     } else {
-      this.model.joinQueue(queue.id)
+      this.model.joinQueue(id)
     }
   }
 
@@ -67,8 +67,8 @@ export default class MainPage extends React.Component {
   }
 
   render() {
-    const { places, mapMode } = this.model.getState()
-    const center = { lat: 59.3446561, lng: 18.0555958 }
+    const { places, mapMode, user: { userCoordinates } } = this.model.getState()
+    const center = userCoordinates || { lat: 59.3446561, lng: 18.0555958 }
     const zoom = 16
     const renderQueue = (place) => (
       <div key={place.id}
@@ -82,13 +82,13 @@ export default class MainPage extends React.Component {
 
         <div className="right width40">
 
-          <div className="center inlineBlock customButtonWidth" onClick={() => this.toggleJoinQueue(queue)}>
-            <Icon icon={model.isInQueue(queue.id) ? 'ion-close-circled' : 'ion-checkmark-circled'}
-                      className={ 'main__icon_size ' + (model.isInQueue(queue.id) ? 'text-red' : '')}>
+          <div className="center inlineBlock customButtonWidth" onClick={() => this.toggleJoinQueue(place.id)}>
+            <Icon icon={model.isInQueue(place.id) ? 'ion-close-circled' : 'ion-checkmark-circled'}
+                      className={ 'main__icon_size ' + (model.isInQueue(place.id) ? 'text-red' : '')}>
             </Icon>
             <br />
             <small>
-              { model.isInQueue(queue.id)
+              { model.isInQueue(place.id)
                   ? "Leave"
                   : "Join"
               }
@@ -112,16 +112,17 @@ export default class MainPage extends React.Component {
     const renderMarker = place => {
       return (
         <Marker
-        {...place.coordinates}
-        queue={place}
-        click={() => this.pushPage(place.id)}
+          {...place.coordinates}
+          place={place}
+          click={() => this.pushPage(place.id)}
+          key={place.id}
         />
       )
     }
     const renderMap = () => (
       <div className='main__map-wrapper'>
         <GoogleMapReact
-          defaultCenter={center}
+          center={center}
           defaultZoom={zoom}
           options={this.createMapOptions}
         >

@@ -66,18 +66,22 @@ export default class DetailPage extends Component {
     const place = R.find(R.propEq('id', this.props.queueId))(places)
     const q = R.find(R.propEq('id', this.props.queueId))(queues) || {}
     const queue = q.queue || [] // Empty if the queue is empty
-    const center = { lat: 59.3446561, lng: 18.0555958 }
-    const zoom = 11
-    const renderMarker = queue => (
+    const center = place.coordinates
+    const zoom = 17
+    const renderMarker = p => (
       <Marker
-        {...queue.coordinates}
-        queue={queue}
+        {...p.coordinates}
+        place={p}
         click={()=>{}}
+        key={p.id}
       />
     )
 
-    const toggle = () => this.toggleJoinQueue(queue)
-    const directions = "https://www.google.com/maps/dir//" + queue.coordinates.lat + "," + queue.coordinates.lng
+    const toggle = () => this.toggleJoinQueue(place.id)
+    const userLocString = user.userCoordinates
+      ? user.userCoordinates.lat + "," + user.userCoordinates.lng
+      : ''
+    const directions = "https://www.google.com/maps/dir/" + userLocString + "/" + place.coordinates.lat + "," + place.coordinates.lng
     const renderButtons = () =>(
       model.isInQueue(this.props.queueId)
       ? <div className="button-wrapper">
@@ -92,13 +96,14 @@ export default class DetailPage extends Component {
           Join Queue
         </div>
     )
-    const placeInLine = R.findIndex(R.propEq('id', user.id), queue) + 1;
+    const index = R.findIndex(R.propEq('id', user.id), queue)
+    const placeInLine = index
     return (
       <Page renderToolbar={() => <CustomToolbar/>}>
         <div className="pagePadding">
           <div className='map-wrapper'>
             <GoogleMapReact
-              defaultCenter={center}
+              center={center}
               defaultZoom={zoom}
               options={this.createMapOptions}
             >
@@ -123,7 +128,10 @@ export default class DetailPage extends Component {
               <div className="left">
                 <div className="detail__circle bg-blue">
                   <div className="detail__circle_adjustment">
-                    {placeInLine == 0 ? queue.length : placeInLine}
+                    { placeInLine == -1
+                      ? queue.length
+                      : placeInLine
+                    }
                   </div>
                 </div>
               </div>
@@ -138,7 +146,10 @@ export default class DetailPage extends Component {
               <div className="left">
                 <div className="detail__circle bg-yellow">
                   <div className="detail__circle_adjustment">
-                    20
+                    { placeInLine == -1
+                      ? queue.length * 5
+                      : placeInLine * 5
+                    }
                   </div>
                 </div>
               </div>

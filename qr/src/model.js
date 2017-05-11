@@ -4,6 +4,16 @@ import * as firebase from 'firebase'
 class DataManager {
 
   constructor() {
+    // Public API
+    this.joinQueue = this.joinQueue.bind(this);
+    this.leaveQueue = this.leaveQueue.bind(this);
+    this.toggleMapMode = this.toggleMapMode.bind(this);
+    this.subscribe = this.subscribe.bind(this);
+    this.unsubscribe = this.unsubscribe.bind(this);
+    this.findById = this.findById.bind(this);
+    this.findIndexById = this.findIndexById.bind(this);
+
+    // Setup user id
     const UUID_KEY = 'userId'
     if (!localStorage.getItem(UUID_KEY)) {
       // Generate a random user id and store it when the app is launched the first time
@@ -13,6 +23,7 @@ class DataManager {
     }
     const uuid = localStorage.getItem(UUID_KEY)
 
+    // Setup app state
     const config = {
       apiKey: "AIzaSyChKntR2x01yHa_5KMkXOItmHWNEZVIHcs",
       authDomain: "queuer-ff37b.firebaseapp.com",
@@ -29,21 +40,14 @@ class DataManager {
       firebaseApp: firebase.initializeApp(config),
       user: {
         id: uuid,
-        name: 'Jepz'
+        name: 'Jepz',
+				userCoordinates: null
       },
       storeRef: firebase.database().ref('places'),
       queuesRef: firebase.database().ref('queues')
     }
 
-    // Public API
-    this.joinQueue = this.joinQueue.bind(this);
-    this.leaveQueue = this.leaveQueue.bind(this);
-    this.toggleMapMode = this.toggleMapMode.bind(this);
-    this.subscribe = this.subscribe.bind(this);
-    this.unsubscribe = this.unsubscribe.bind(this);
-    this.findById = this.findById.bind(this);
-    this.findIndexById = this.findIndexById.bind(this);
-
+    // Setup firebase
     const { firebaseApp } = this.state
     const self = this
     this.state.storeRef.on('value', snapshot => self.setState({ places: snapshot.val() }))
@@ -54,6 +58,21 @@ class DataManager {
       )
       self.setState({ queues: queues })
     })
+    
+    // Setup Geolocation
+    if (navigator.geolocation) {
+			console.log('Attempting to get the user\'s location')
+      const geoSuccess = (position) => {
+        console.log('pos', position)
+        const coords = position.coords
+        const userCoordinates = { lat: coords.latitude, lng: coords.longitude }
+        this.setState({user: R.assoc('userCoordinates', userCoordinates, this.state.user)})
+      }
+      const geoError = error => console.log('User denied location')
+      navigator.geolocation.getCurrentPosition(geoSuccess, geoError)
+		} else {
+			console.log('Geolocation not available')
+		} 
   }
 
   getState() { return this.state }
@@ -68,12 +87,6 @@ class DataManager {
   isInQueue(id) {
     const { user } = this.state
     const queue = this.findById(id, this.state.queues)
-    console.log('looking for')
-    console.log(id)
-    console.log('in')
-    console.log(this.state.queues)
-    console.log('found')
-    console.log(queue)
     return queue
       ? !!this.findById(user.id, queue.queue)
       : false
