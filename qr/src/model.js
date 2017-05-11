@@ -9,11 +9,11 @@ class DataManager {
     this.subscribers = []
     this.state = {
       queues: [
-        this.createQueue('HM', {lat: 59.3336886, lng: 18.0725117}, 'Smålandsgatan 16'),
-        this.createQueue('Systemet', {lat: 59.3332612, lng: 18.0663472}, 'Norrlandsgatan 3'),
-        this.createQueue('Cool Q', {lat: -27.5693884, lng: 152.9251143},'u2/25 Valance St, Oxley QLD 4075'),
-        this.createQueue('Hello Q hair', {lat: 24.0655611, lng: 120.695485}, '號, No. 18振興東街 Wufeng Dist'),
-        this.createQueue('Goodbe', {lat: 59.3497173, lng: 18.105518}, 'Södra Hamnvägen 46')
+        this.createQueue('Försäkringskassan', {lat: 59.347392, lng: 18.058927}, 'Roslagsgatan 23', 'Måndag-Fredag: 8-18'),
+        this.createQueue('Polisen', {lat: 59.344329, lng: 18.056374}, 'Odengatan 48', 'Måndag-Torsdag: 11-18'),
+        this.createQueue('SEB', {lat: 59.343224, lng: 18.059227},'Döbelnsgatan 63', 'Måndag-Fredag: 12-16'),
+        this.createQueue('Arbetsförmedlingen', {lat: 59.342748, lng: 18.06295}, 'Kungstensgatan 15', 'Måndag-Fredag: 8-17'),
+        this.createQueue('Vaccin Direkt', {lat: 59.338814, lng: 18.05721}, 'Tegnérgatan 37', 'Måndag-Söndag 8-20')
       ],
       mapMode: true
     }
@@ -52,12 +52,13 @@ class DataManager {
     this.setState({mapMode: !mapMode })
   }
 
-  createQueue(id, coordinates, address) {
+  createQueue(id, coordinates, address, hours) {
     return {
       id: id,
       inQueue: false,
       address: address,
-      coordinates: coordinates
+      coordinates: coordinates,
+      hours: hours
     }
   }
 

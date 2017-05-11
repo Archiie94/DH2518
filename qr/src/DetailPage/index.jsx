@@ -94,9 +94,9 @@ export default class DetailPage extends Component {
           </div>
           <div className="detail-content">
             <br />
-            <strong>Försäkringskassan</strong><br />
+            <strong>{queue.id}</strong><br />
             <small>{queue.address}</small><br />
-            <small>Måndag - Fredag: 8-18</small>
+            <small>{queue.hours}</small>
 
             <div className="clearBoth"></div>
             <br />
