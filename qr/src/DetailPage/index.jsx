@@ -14,9 +14,9 @@ export default class DetailPage extends Component {
     super(props)
     this.notify = this.notify.bind(this)
     this.model = model
-    this.toggleChatMode = this.toggleChatMode.bind(this);
+    this.toggleChatMode = this.toggleChatMode.bind(this)
     this.toggleJoinQueue = this.toggleJoinQueue.bind(this)
-    const { queues } = this.model.getState()
+    this.createMapOptions = this.createMapOptions.bind(this)
     this.state = {
       chatMode: false
     }
@@ -25,6 +25,20 @@ export default class DetailPage extends Component {
     this.setState({
       chatMode: state
     })
+  }
+
+  createMapOptions(maps) {
+    // next props are exposed at maps
+    // "Animation", "ControlPosition", "MapTypeControlStyle", "MapTypeId",
+    // "NavigationControlStyle", "ScaleControlStyle", "StrokePosition", "SymbolPath", "ZoomControlStyle",
+    // "DirectionsStatus", "DirectionsTravelMode", "DirectionsUnitSystem", "DistanceMatrixStatus",
+    // "DistanceMatrixElementStatus", "ElevationStatus", "GeocoderLocationType", "GeocoderStatus", "KmlLayerStatus",
+    // "MaxZoomStatus", "StreetViewStatus", "TransitMode", "TransitRoutePreference", "TravelMode", "UnitSystem"
+    return {
+      zoomControl: false,
+      fullscreenControl: false,
+      mapTypeControl: false
+    };
   }
 
   toggleJoinQueue(queue) {
@@ -79,6 +93,7 @@ export default class DetailPage extends Component {
             <GoogleMapReact
               defaultCenter={center}
               defaultZoom={zoom}
+              options={this.createMapOptions}
             >
               { queues.map(renderMarker) }
             </GoogleMapReact>
