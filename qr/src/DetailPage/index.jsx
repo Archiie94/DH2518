@@ -85,7 +85,7 @@ export default class DetailPage extends Component {
             Leave Queue
           </div>
         </div>
-      : <div className="list__blue nomargin center" onClick={this.toggleJoinQueue}>
+      : <div className="list__blue nomargin center" onClick={() => this.toggleJoinQueue(queue)}>
           Join Queue
         </div>
     )
