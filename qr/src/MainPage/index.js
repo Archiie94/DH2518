@@ -32,12 +32,11 @@ export default class MainPage extends React.Component {
     this.setState(R.merge(this.state, newState))
   }
 
-  toggleJoinQueue(queue) {
-    console.log(queue)
-    if (queue.inQueue) {
-      this.model.leaveQueue(queue)
+  toggleJoinQueue(id) {
+    if (model.isInQueue(id)) {
+      this.model.leaveQueue(id)
     } else {
-      this.model.joinQueue(queue)
+      this.model.joinQueue(id)
     }
   }
 
@@ -55,8 +54,8 @@ export default class MainPage extends React.Component {
     };
   }
 
-  pushPage(queue) {
-    this.props.navigator.pushPage({component: () => <DetailPage queueId={queue.id}/>})
+  pushPage(id) {
+    this.props.navigator.pushPage({component: () => <DetailPage queueId={id}/>})
   }
 
   renderToolbar() {
@@ -68,28 +67,28 @@ export default class MainPage extends React.Component {
   }
 
   render() {
-    const { queues, mapMode } = this.model.getState()
-    const center = { lat: 59.343404, lng: 18.061171 }
-    const zoom = 15
-    const renderQueue = (queue) => (
-      <div key={queue.id}
+    const { places, mapMode, user: { userCoordinates } } = this.model.getState()
+    const center = userCoordinates || { lat: 59.3446561, lng: 18.0555958 }
+    const zoom = 16
+    const renderQueue = (place) => (
+      <div key={place.id}
            className="list__blue">
 
         <div className="left width60"
-             onClick={() => this.pushPage(queue)}>
-          <p className="nomargin"><b>{queue.id}</b></p>
-          <small>{queue.address}</small>
+             onClick={() => this.pushPage(place.id)}>
+          <p className="nomargin"><b>{place.id}</b></p>
+          <small>{place.address}</small>
         </div>
 
         <div className="right width40">
 
-          <div className="center inlineBlock customButtonWidth" onClick={() => this.toggleJoinQueue(queue)}>
-            <Icon icon={queue.inQueue ? 'ion-close-circled' : 'ion-checkmark-circled'}
-                      className={ 'main__icon_size ' + (queue.inQueue ? 'text-red' : '')}>
+          <div className="center inlineBlock customButtonWidth" onClick={() => this.toggleJoinQueue(place.id)}>
+            <Icon icon={model.isInQueue(place.id) ? 'ion-close-circled' : 'ion-checkmark-circled'}
+                      className={ 'main__icon_size ' + (model.isInQueue(place.id) ? 'text-red' : '')}>
             </Icon>
             <br />
             <small>
-              { queue.inQueue
+              { model.isInQueue(place.id)
                   ? "Leave"
                   : "Join"
               }
@@ -110,29 +109,31 @@ export default class MainPage extends React.Component {
 
       </div>
     )
-    const renderMarker = queue => (
-      <Marker
-        {...queue.coordinates}
-        queue={queue}
-        click={this.pushPage}
-      />
-    )
+    const renderMarker = place => {
+      return (
+        <Marker
+          {...place.coordinates}
+          place={place}
+          click={() => this.pushPage(place.id)}
+          key={place.id}
+        />
+      )
+    }
     const renderMap = () => (
       <div className='main__map-wrapper'>
         <GoogleMapReact
-          defaultCenter={center}
+          center={center}
           defaultZoom={zoom}
           options={this.createMapOptions}
-
         >
-          { queues.map(renderMarker) }
+          { places.map(renderMarker) }
         </GoogleMapReact>
       </div>
     )
     const renderList = () => (
       <div>
         <div className="custom__header">Nearby Queues</div>
-        { queues.map(renderQueue) }
+        { places.map(renderQueue) }
       </div>
     )
     return (
@@ -144,8 +145,8 @@ export default class MainPage extends React.Component {
           }
         </div>
         <div className="map__button">
-            <ons-icon onClick={this.model.toggleMapMode} 
-                    icon={mapMode ? 'ion-ios-list-outline' : 'ion-map'} 
+            <ons-icon onClick={this.model.toggleMapMode}
+                    icon={mapMode ? 'ion-ios-list-outline' : 'ion-map'}
                     class="map_icon__center"></ons-icon>
         </div>
       </Page>

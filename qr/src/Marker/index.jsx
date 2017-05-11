@@ -4,15 +4,15 @@ import './index.css'
 
 export default class Marker extends Component {
   render() {
-    const queue = this.props.queue
+    const place = this.props.place
     const click = this.props.click
     return (
       <div className='text-blue marker-wrapper'>
         <Icon className='icon' icon='ion-ios-location'></Icon>
-        <div onClick={() => click(queue)} className="clearfix marker-info">
-          {queue.id}
+        <div onClick={() => click(place)} className="clearfix marker-info">
+          {place.id}
         </div>
       </div>
-    )
+      )
   }
 }
