@@ -59,17 +59,24 @@ export default class DetailPage extends Component {
   render() {
     const center = { lat: 59.3446561, lng: 18.0555958 }
     const zoom = 11
+    const queue = this.props.queue
     const toggle = () => this.toggleJoinQueue(this.props.queue)
     const inQueue = this.props.queue.inQueue
     const renderButtons = () =>(
       inQueue
-      ? <div className="list__blue nomargin center red" onClick={toggle}>
-          Leave Queue
+      ? <div className="button-wrapper">
+          <div className="list__blue center add-button">
+            Add 5 minutes
+          </div>
+          <div className="list__blue center red leave-button" onClick={toggle}>
+            Leave Queue
+          </div>
         </div>
       : <div className="list__blue nomargin center" onClick={toggle}>
           Join Queue
         </div>
     )
+    console.log(queue)
     return (
       <Page renderToolbar={() => <CustomToolbar/>}>
         <div className="pagePadding">
@@ -88,7 +95,7 @@ export default class DetailPage extends Component {
           <div className="detail-content">
             <br />
             <strong>Försäkringskassan</strong><br />
-            <small>Roslagsgatan 29</small><br />
+            <small>{queue.address}</small><br />
             <small>Måndag - Fredag: 8-18</small>
 
             <div className="clearBoth"></div>
@@ -139,9 +146,9 @@ export default class DetailPage extends Component {
             </Dialog>
             <div className="lockToBottom">
               <div className="left customSearch">
-                <input placeholder="Need help?" type="search" className="search-input helpbar width100" />
+                <input onClick={()=> this.toggleChatMode(true) } placeholder="Need help?" type="search" className="search-input helpbar width100" />
               </div>
-              <div onClick={()=> this.toggleChatMode(true) } className="right customSearch list__blue nopadding nomargin">
+              <div className="right customSearch list__blue nopadding nomargin">
                Send
               </div>
             </div>
