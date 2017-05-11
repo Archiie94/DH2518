@@ -1,4 +1,5 @@
 import R from 'ramda'
+import * as firebase from 'firebase'
 
 class DataManager {
 
@@ -6,8 +7,17 @@ class DataManager {
     this.createQueue = this.createQueue.bind(this);
     this.setPropInQueue = this.setPropInQueue.bind(this);
 
+    const config = {
+      apiKey: "AIzaSyChKntR2x01yHa_5KMkXOItmHWNEZVIHcs",
+      authDomain: "queuer-ff37b.firebaseapp.com",
+      databaseURL: "https://queuer-ff37b.firebaseio.com",
+      projectId: "queuer-ff37b",
+      storageBucket: "queuer-ff37b.appspot.com",
+      messagingSenderId: "1020024845817"
+    }
     this.subscribers = []
     this.state = {
+      places: [],
       queues: [
         this.createQueue('Försäkringskassan', {lat: 59.347392, lng: 18.058927}, 'Roslagsgatan 23', 'Måndag-Fredag: 8-18'),
         this.createQueue('Polisen', {lat: 59.344329, lng: 18.056374}, 'Odengatan 48', 'Måndag-Torsdag: 11-18'),
@@ -15,7 +25,8 @@ class DataManager {
         this.createQueue('Arbetsförmedlingen', {lat: 59.342748, lng: 18.06295}, 'Kungstensgatan 15', 'Måndag-Fredag: 8-17'),
         this.createQueue('Vaccin Direkt', {lat: 59.338814, lng: 18.05721}, 'Tegnérgatan 37', 'Måndag-Söndag 8-20')
       ],
-      mapMode: true
+      mapMode: true,
+      firebaseApp: firebase.initializeApp(config)
     }
 
     // Public API
@@ -24,6 +35,13 @@ class DataManager {
     this.toggleMapMode = this.toggleMapMode.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.unsubscribe = this.unsubscribe.bind(this);
+
+    const { firebaseApp } = this.state
+    const storeRef = firebase.database().ref('places')
+    const self = this
+    storeRef.on('value', function(snapshot) {
+      self.setState({ places: snapshot.val() })
+    })
   }
 
   getState() { return this.state }
@@ -43,7 +61,6 @@ class DataManager {
   }
 
   toggleMapMode() {
-    console.log('switching to map mode')
     const { mapMode } = this.state
     this.setState({mapMode: !mapMode })
   }

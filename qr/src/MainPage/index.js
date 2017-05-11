@@ -68,9 +68,9 @@ export default class MainPage extends React.Component {
   }
 
   render() {
-    const { queues, mapMode } = this.model.getState()
-    const center = { lat: 59.343404, lng: 18.061171 }
-    const zoom = 15
+    const { places, queues, mapMode } = this.model.getState()
+    const center = { lat: 59.3446561, lng: 18.0555958 }
+    const zoom = 11
     const renderQueue = (queue) => (
       <div key={queue.id}
            className="list__blue">
@@ -110,13 +110,16 @@ export default class MainPage extends React.Component {
 
       </div>
     )
-    const renderMarker = queue => (
-      <Marker
-        {...queue.coordinates}
-        queue={queue}
+    const renderMarker = place => {
+      console.log('marker')
+      return (
+        <Marker
+        {...place.coordinates}
+        queue={place}
         click={this.pushPage}
-      />
-    )
+        />
+      )
+    }
     const renderMap = () => (
       <div className='main__map-wrapper'>
         <GoogleMapReact
@@ -125,14 +128,14 @@ export default class MainPage extends React.Component {
           options={this.createMapOptions}
 
         >
-          { queues.map(renderMarker) }
+          { places.map(renderMarker) }
         </GoogleMapReact>
       </div>
     )
     const renderList = () => (
       <div>
         <div className="custom__header">Nearby Queues</div>
-        { queues.map(renderQueue) }
+        { places.map(renderQueue) }
       </div>
     )
     return (
@@ -144,8 +147,8 @@ export default class MainPage extends React.Component {
           }
         </div>
         <div className="map__button">
-            <ons-icon onClick={this.model.toggleMapMode} 
-                    icon={mapMode ? 'ion-ios-list-outline' : 'ion-map'} 
+            <ons-icon onClick={this.model.toggleMapMode}
+                    icon={mapMode ? 'ion-ios-list-outline' : 'ion-map'}
                     class="map_icon__center"></ons-icon>
         </div>
       </Page>
