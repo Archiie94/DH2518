@@ -59,6 +59,13 @@ export default class DetailPage extends Component {
   render() {
     const center = { lat: 59.3446561, lng: 18.0555958 }
     const zoom = 11
+    const { queues } = this.model.getState()
+    const renderMarker = queue => (
+      <Marker
+        {...queue.coordinates}
+        queue={queue}
+      />
+    )
     const queue = this.props.queue
     const toggle = () => this.toggleJoinQueue(this.props.queue)
     const inQueue = this.props.queue.inQueue
@@ -76,7 +83,6 @@ export default class DetailPage extends Component {
           Join Queue
         </div>
     )
-    console.log(queue)
     return (
       <Page renderToolbar={() => <CustomToolbar/>}>
         <div className="pagePadding">
@@ -85,11 +91,7 @@ export default class DetailPage extends Component {
               defaultCenter={center}
               defaultZoom={zoom}
             >
-              <Marker
-                lat={59.3447231}
-                lng={18.0632769}
-                text={'Systembolaget Birger Jarlsgatan'}
-              />
+              { queues.map(renderMarker) }
             </GoogleMapReact>
           </div>
           <div className="detail-content">
