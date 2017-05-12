@@ -72,11 +72,11 @@ export default class MainPage extends React.Component {
     const zoom = 16
     const renderQueue = (place) => (
       <div key={place.id}
-           className="list__blue">
+           className="main__list">
 
         <div className="left width60"
              onClick={() => this.pushPage(place.id)}>
-          <p className="nomargin"><b>{place.id}</b></p>
+          <p className="nomargin text-blue"><b>{place.id}</b></p>
           <small>{place.address}</small>
         </div>
 
@@ -84,7 +84,7 @@ export default class MainPage extends React.Component {
 
           <div className="center inlineBlock customButtonWidth" onClick={() => this.toggleJoinQueue(place.id)}>
             <Icon icon={model.isInQueue(place.id) ? 'ion-close-circled' : 'ion-checkmark-circled'}
-                      className={ 'main__icon_size ' + (model.isInQueue(place.id) ? 'text-red' : '')}>
+                      className={ 'main__icon_size ' + (model.isInQueue(place.id) ? 'text-red' : 'text-green')}>
             </Icon>
             <br />
             <small>
@@ -96,8 +96,8 @@ export default class MainPage extends React.Component {
           </div>
 
           <div className="center inlineBlock">
-            <div className="main__circle">
-              <div className="main__circle_adjuster">
+            <div className="main__circle bg-blue">
+              <div className="main__circle_adjuster text-white">
                 30
               </div>
             </div>

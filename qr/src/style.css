@@ -21,12 +21,14 @@
 .nomargin {margin:0px !important;}
 
 .inlineBlock {display: inline-block;}
-/* Colors and backgrounds
- */
-.text-blue {color: #07c;}
-.bg-blue {background: #07c;}
-.bg-yellow {background: #f7cc36;}
 
+/* Colors and backgrounds */
+.bg-blue {background: #07c;}
+.bg-yellow {background: #DAA203;}
+.bg-orange {background: #ff5722;}
+
+.text-blue {color: #07c;}
+.text-white {color: #FFF;}
 .text-red {color: #F00;}
 .text-green {color: #1ac41a;}
 
@@ -40,16 +42,7 @@
   font-size: 18px;
 }
 
-.list__blue {
-  background: #07c; 
-  border-radius: 4px; 
-  margin: 10px;
-  color: #FFF;
-  padding: 3%;
-}
-
-/* Customized Lists
- */
+/* Customized Lists */
 .custom__header {padding:10px; font-size:18px;border-bottom: 1px solid #CCC;background:#EEE;}
 .custom__row-header {
   padding:10px;
@@ -69,4 +62,11 @@
   background-color: blue;
   height: 500px;
   width: 100%;
+}
+
+.list__blue {
+  background: #07c;
+  padding: 10px;
+  color: #FFF;
+  border-radius: 4px;
 }
