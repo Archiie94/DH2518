@@ -7,11 +7,18 @@
 .main__circle {
 	width: 25px;
 	height: 25px;
-	background: #f7cc36;
 	border-radius: 25px;	
 	margin-left: 3px;
 }
-.main__circle_adjuster {padding-top: 3px;}
+
+.main__list {
+  background: #FFF; 
+  border-radius: 2px; 
+  margin: 8px;
+  padding: 3%;
+  border: 1px solid #EEE;
+}
+.main__circle_adjuster {padding-top: 2px;}
 
 .main__map-wrapper {
   height: 100vh;
