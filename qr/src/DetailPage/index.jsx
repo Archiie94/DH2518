@@ -8,6 +8,8 @@ import CustomToolbar from './../CustomToolbar'
 import Chat from './../Chat'
 import Marker from './../Marker'
 
+import MQTT from './mqtt.js'
+
 export default class DetailPage extends Component {
 
   constructor(props) {
@@ -177,7 +179,7 @@ export default class DetailPage extends Component {
               <div className="left customSearch">
                 <input onClick={()=> this.toggleChatMode(true) } placeholder="Need help?" type="search" className="search-input helpbar width100" />
               </div>
-              <div className="right customSearch list__blue nopadding nomargin">
+              <div id="send" className="right customSearch list__blue nopadding nomargin">
                Send
               </div>
             </div>

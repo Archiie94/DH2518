@@ -5,6 +5,8 @@
   "dependencies": {
     "firebase": "^3.9.0",
     "google-map-react": "^0.24.0",
+    "mqtt": "^2.7.1",
+    "mqtt-react": "0.0.2",
     "onsenui": "2.2.x",
     "prop-types": "^15.5.8",
     "ramda": "^0.23.0",
