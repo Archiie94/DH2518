@@ -10,10 +10,11 @@
 	width: 40px;
 	height: 40px;
 	text-align: center;
+    display: table-cell; 
+    vertical-align: middle;
 	border-radius: 40px;
 }
 .detail__circle_adjustment {
-	padding-top: 1px;
 	font-size: 28px;
 }
 
@@ -40,9 +41,12 @@
 }
 
 .lockToBottom {
-    position: absolute;
-    bottom: 10px;
-    width: calc(100% - 20px);
+    background-color: #f9f9f9;
+    position: fixed;
+    bottom: 0px;
+    padding: 10px;
+    width: inherit;
+    /*width: calc(100% - 20px);*/
     left: 0px;
     right: 0px;
     margin: 0 auto;
