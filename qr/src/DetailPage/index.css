@@ -109,3 +109,7 @@
     background-repeat: no-repeat;
     display: block;
 }
+
+.detail-content{
+    padding-bottom: 30px;
+}
