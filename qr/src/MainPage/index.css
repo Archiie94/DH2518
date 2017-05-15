@@ -9,6 +9,9 @@
 	height: 25px;
 	border-radius: 25px;	
 	margin-left: 3px;
+    display: table-cell; 
+    vertical-align: middle;
+    text-align: center;
 }
 
 .main__list {
@@ -18,7 +21,7 @@
   padding: 3%;
   border: 1px solid #EEE;
 }
-.main__circle_adjuster {padding-top: 2px;}
+.main__circle_adjuster {padding-top: 0px;}
 
 .main__map-wrapper {
   height: 100vh;
@@ -30,7 +33,8 @@
 
 .map__button {
 	top: auto;
-    position: absolute;
+    position: sticky;
+    position: -webkit-sticky; 
     bottom: 15px !important;
     left: 10px !important;
     right: auto;

@@ -165,23 +165,23 @@ export default class DetailPage extends Component {
               {renderButtons()}
 
             <br />
-            <Dialog isOpen={this.state.chatMode} className='displayChat'>
-              <div className='displayChat__content'>
-                <div className="closeChatBox" onClick={()=> this.toggleChatMode(false) }>
-                  <ons-icon icon="ion-close-circled"></ons-icon>
-                </div>
-                <Chat/>
-              </div>
-            </Dialog>
-            <div className="lockToBottom">
-              <div className="left customSearch">
-                <input onClick={()=> this.toggleChatMode(true) } placeholder="Need help?" type="search" className="search-input helpbar width100" />
-              </div>
-              <div className="right customSearch list__blue nopadding nomargin">
-               Send
-              </div>
-            </div>
           </div>
+          <Dialog isOpen={this.state.chatMode} className='displayChat'>
+            <div className='displayChat__content'>
+              <div className="closeChatBox" onClick={()=> this.toggleChatMode(false) }>
+                <ons-icon icon="ion-close-circled"></ons-icon>
+              </div>
+              <Chat/>
+            </div>
+          </Dialog>
+          <div className="lockToBottom">
+            <div className="left customSearch">
+              <input onClick={()=> this.toggleChatMode(true) } placeholder="Need help?" type="search" className="search-input helpbar width100" />
+            </div>
+            <div className="right customSearch list__blue nopadding nomargin">
+             Send
+            </div>
+          </div>  
         </div>
       </Page>
     );
