@@ -33,8 +33,7 @@
 
 .map__button {
 	top: auto;
-    position: sticky;
-    position: -webkit-sticky; 
+    position: fixed;
     bottom: 15px !important;
     left: 10px !important;
     right: auto;
