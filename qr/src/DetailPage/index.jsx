@@ -17,14 +17,20 @@ export default class DetailPage extends Component {
     this.toggleChatMode = this.toggleChatMode.bind(this)
     this.toggleJoinQueue = this.toggleJoinQueue.bind(this)
     this.createMapOptions = this.createMapOptions.bind(this)
+    this.add5 = this.add5.bind(this)
     this.state = {
-      chatMode: false
+      chatMode: false,
+      isLastInQueue: model.isInLastPlace(this.props.queueId)
     }
   }
   toggleChatMode (state){
     this.setState({
       chatMode: state
     })
+  }
+
+  add5 () {
+    this.model.add5min(this.props.queueId)
   }
 
   createMapOptions(maps) {
@@ -58,11 +64,13 @@ export default class DetailPage extends Component {
   }
 
   notify(updates) {
-    this.setState(R.merge(this.state, updates))
+    const isInLastPlace = { isLastInQueue: model.isInLastPlace(this.props.queueId) }
+    this.setState(R.merge(this.state, updates, isInLastPlace))
   }
 
   render() {
     const { places, queues, user } = this.model.getState()
+    const { isLastInQueue } = this.state;
     const place = R.find(R.propEq('id', this.props.queueId))(places)
     const q = R.find(R.propEq('id', this.props.queueId))(queues) || {}
     const queue = q.queue || [] // Empty if the queue is empty
@@ -85,7 +93,8 @@ export default class DetailPage extends Component {
     const renderButtons = () =>(
       model.isInQueue(this.props.queueId)
       ? <div className="button-wrapper">
-          <div className="list__blue center add-button">
+          <div className="list__blue center add-button"
+                 onClick={this.add5}>
             Add 5 minutes
           </div>
           <div className="list__blue center red leave-button" onClick={() => this.toggleJoinQueue(this.props.queueId)}>

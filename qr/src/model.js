@@ -41,7 +41,7 @@ class DataManager {
       user: {
         id: uuid,
         name: 'Jepz',
-				userCoordinates: null
+        userCoordinates: null
       },
       storeRef: firebase.database().ref('places'),
       queuesRef: firebase.database().ref('queues')
@@ -58,7 +58,7 @@ class DataManager {
       )
       self.setState({ queues: queues })
     })
-    
+
     // Setup Geolocation
     if (navigator.geolocation) {
 			console.log('Attempting to get the user\'s location')
@@ -72,7 +72,7 @@ class DataManager {
       navigator.geolocation.getCurrentPosition(geoSuccess, geoError)
 		} else {
 			console.log('Geolocation not available')
-		} 
+		}
   }
 
   getState() { return this.state }
@@ -90,6 +90,13 @@ class DataManager {
     return queue
       ? !!this.findById(user.id, queue.queue)
       : false
+  }
+
+  isInLastPlace(queueId) {
+    const { user, queues } = this.state
+    const queue = this.findById(queueId, queues)
+    const userPos = this.findIndexById(user.id, queue.queue)
+    return userPos === queue.queue.length - 1
   }
 
   findIndexById(id, arr) {
@@ -122,7 +129,7 @@ class DataManager {
       if (post) {
         const index = self.findIndexById(id, post)
         if (index != -1) {
-          post[index].queue.push(user)
+          post[index].queue.push(R.omit('userCoordinates', user))
         } else {
           // Create the queue if it does not exist
           const impostor = { id: 'impostor', name: 'not a real person' }
@@ -142,6 +149,26 @@ class DataManager {
         const userObj = this.findById(user.id, post[queueIndex].queue)
         const queue = post[queueIndex].queue
         post[queueIndex].queue = R.without([userObj], queue)
+      }
+      return post
+    })
+  }
+
+  add5min(id) {
+    const { user } = this.state
+    this.state.queuesRef.transaction(post => {
+      if (post) {
+        const isDefined = (val) => true//typeof val !== 'undefined'
+        const queueIndex = this.findIndexById(id, post)
+        const queue = post[queueIndex].queue
+        const userIndex = this.findIndexById(user.id, queue)
+        if (userIndex + 1 < queue.length) {
+          const temp = R.clone(queue[userIndex])
+          queue[userIndex] = queue[userIndex + 1]
+          queue[userIndex + 1] = temp
+        } else {
+          console.log('Cannot swap. User is last in line')
+        }
       }
       return post
     })
