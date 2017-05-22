@@ -1,6 +1,9 @@
 import R from 'ramda'
 import * as firebase from 'firebase'
 
+const UUID_KEY = 'userId'
+const NAME_KEY = 'userName'
+
 class DataManager {
 
   constructor() {
@@ -12,9 +15,12 @@ class DataManager {
     this.unsubscribe = this.unsubscribe.bind(this);
     this.findById = this.findById.bind(this);
     this.findIndexById = this.findIndexById.bind(this);
+    this.add5min = this.add5min.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);
+    this.hasSetName = this.hasSetName.bind(this);
+    this.setName = this.setName.bind(this);
 
     // Setup user id
-    const UUID_KEY = 'userId'
     if (!localStorage.getItem(UUID_KEY)) {
       // Generate a random user id and store it when the app is launched the first time
       // This id will be used on firebase. Techinically it should be globally unique,
@@ -22,6 +28,8 @@ class DataManager {
       localStorage.setItem(UUID_KEY, Math.random() + "")
     }
     const uuid = localStorage.getItem(UUID_KEY)
+    
+    const name = localStorage.getItem(NAME_KEY) || null // name is null if it has not been set yet
 
     // Setup app state
     const config = {
@@ -40,7 +48,7 @@ class DataManager {
       firebaseApp: firebase.initializeApp(config),
       user: {
         id: uuid,
-        name: 'Jepz',
+        name: name,
         userCoordinates: null
       },
       storeRef: firebase.database().ref('places'),
@@ -129,7 +137,12 @@ class DataManager {
       if (post) {
         const index = self.findIndexById(id, post)
         if (index != -1) {
-          post[index].queue.push(R.omit('userCoordinates', user))
+          const name = user.name ? user.name : 'noname';
+          const userData = {
+            id: user.id,
+            name: name 
+          }
+          post[index].queue.push(R.omit('userCoordinates', userData))
         } else {
           // Create the queue if it does not exist
           const impostor = { id: 'impostor', name: 'not a real person' }
@@ -172,6 +185,46 @@ class DataManager {
       }
       return post
     })
+  }
+
+  sendMessage(queueId, message) {
+    if (!this.hasSetName) {
+      alert('You must set your name first!')
+      return // Don't let the user send a message until they have set a name
+    }
+
+    const { user } = this.state
+    const createMessage = message => {
+      return {
+        message: message,
+        id: user.id + '' + Date.now(),
+        name: user.name,
+        uuid: user.id
+      }
+    }
+    this.state.queuesRef.transaction(post => {
+      if (post) {
+        const queueIndex = this.findIndexById(queueId, post)
+        if (post[queueIndex].messages) {
+          post[queueIndex].messages.push(createMessage(message))
+        } else {
+          post[queueIndex].messages = [createMessage(message)]
+        }
+      }
+      return post
+    })
+  }
+
+  hasSetName() {
+    const { user: { name } } = this.state
+    return name && (name !== 'Jepz')
+  }
+
+  setName(name) {
+    const { user } = this.state
+    const withName = R.assoc('name', name, user)
+    this.setState({ user: withName })
+    localStorage.setItem(NAME_KEY, name)
   }
 
 }

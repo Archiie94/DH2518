@@ -180,17 +180,17 @@ export default class DetailPage extends Component {
               <div className="closeChatBox" onClick={()=> this.toggleChatMode(false) }>
                 <ons-icon icon="ion-close-circled"></ons-icon>
               </div>
-              <Chat/>
+              <Chat isOpen={this.state.chatMode} queueId={this.props.queueId} />
             </div>
           </Dialog>
           <div className="lockToBottom">
             <div className="left customSearch">
-              <input onClick={()=> this.toggleChatMode(true) } placeholder="Need help?" type="search" className="search-input helpbar width100" />
+              <input id='msg-input' onClick={()=> this.toggleChatMode(true) } placeholder="Need help?" type="search" className="search-input helpbar width100" />
             </div>
             <div className="right customSearch list__blue nopadding nomargin">
              Send
             </div>
-          </div>  
+          </div>
         </div>
       </Page>
     );
